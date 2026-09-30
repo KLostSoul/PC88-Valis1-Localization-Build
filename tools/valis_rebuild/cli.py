@@ -158,9 +158,8 @@ def command_build(args: argparse.Namespace) -> dict:
         expected_size=baseline["input"]["kanji1_size"], label="KANJI1 ROM", suffix=".rom",
     )
     output = Path(args.out).resolve()
-    # Separate component directories keep the two component logs independent.
-    disk = build_disk(root, d88_source, output / "d88")
-    kanji = build_kanji(root, rom_source, output / "kanji")
+    disk = build_disk(root, d88_source, output)
+    kanji = build_kanji(root, rom_source, output)
     if disk["status"] != "OK" or kanji["status"] != "OK":
         raise BuildError("출력 해시가 검토된 릴리스 기준과 일치하지 않습니다")
     result = {
@@ -170,7 +169,6 @@ def command_build(args: argparse.Namespace) -> dict:
         "output": str(output),
         "status": "OK",
     }
-    _write_json(output / "build-log.json", result)
     return result
 
 
@@ -235,11 +233,11 @@ def build_parser() -> argparse.ArgumentParser:
     export.set_defaults(handler=command_export_original)
     build_d88 = sub.add_parser("build-d88", help="원본 D88에 확정 raw 변경과 GFX 로고 PNG 반영")
     build_d88.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
-    build_d88.add_argument("--out", default="output/d88", help="D88 출력 디렉터리")
+    build_d88.add_argument("--out", default=".", help="출력 디렉터리")
     build_d88.set_defaults(handler=command_build_d88)
     build_rom = sub.add_parser("build-rom", help="확정된 476개 글리프로 KANJI1 ROM 생성")
     build_rom.add_argument("--rom", required=True, help="원본 KANJI1 ROM 파일 또는 SHA-256으로 찾을 후보 폴더")
-    build_rom.add_argument("--out", default="output/kanji", help="KANJI1 출력 디렉터리")
+    build_rom.add_argument("--out", default=".", help="출력 디렉터리")
     build_rom.add_argument(
         "--allow-input-hash-mismatch",
         action="store_true",
@@ -249,7 +247,7 @@ def build_parser() -> argparse.ArgumentParser:
     build = sub.add_parser("build", help="D88 로고 PNG와 KANJI1을 함께 재현 빌드")
     build.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
     build.add_argument("--rom", required=True, help="원본 KANJI1 ROM 파일 또는 SHA-256으로 찾을 후보 폴더")
-    build.add_argument("--out", default="output", help="통합 출력 디렉터리")
+    build.add_argument("--out", default=".", help="출력 디렉터리")
     build.set_defaults(handler=command_build)
     verify = sub.add_parser("verify", help="출력 D88/ROM 구조·크기·해시 검증")
     verify.add_argument("--d88", required=True, help="검증할 D88 경로")

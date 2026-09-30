@@ -91,7 +91,6 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
         "exact_release_match": image.sha256() == baseline["output"]["d88_sha256"],
         "status": "OK" if image.sha256() == baseline["output"]["d88_sha256"] else "MISMATCH",
     }
-    _write_json(output_dir / "repro-log.json", log)
     return log
 
 
@@ -133,6 +132,4 @@ def build_kanji(
         "exact_release_match": hashlib.sha256(output_bytes).hexdigest() == baseline["output"]["kanji1_sha256"],
         "status": "OK" if hashlib.sha256(output_bytes).hexdigest() == baseline["output"]["kanji1_sha256"] else "MISMATCH",
     }
-    _write_json(output_dir / "repro-log.json", log)
-    _write_json(output_dir / "glyph-report.json", {"schema": "valis-kanji-build-report/v1", "glyphs": glyph_report})
     return log

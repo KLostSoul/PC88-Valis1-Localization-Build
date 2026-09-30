@@ -17,23 +17,22 @@ PYTHONPATH=. python -m unittest discover -s tests -v
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build \
   --d88 import \
-  --rom import \
-  --out output
+  --rom import
 ```
 
 출력 검증은 다음과 같습니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 output/d88 \
-  --rom output/kanji
+  --d88 . \
+  --rom .
 ```
 
-동일 명령을 별도 출력 디렉터리에 한 번 더 실행하고 두 결과의 SHA-256을 비교합니다.
+빌드 결과를 기준 D88과 바이트 단위로 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built output/d88 \
+  --built . \
   --reference 결과 \
   --fail-on-diff
 ```

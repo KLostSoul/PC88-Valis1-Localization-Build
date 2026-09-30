@@ -27,14 +27,10 @@
 
 - 재조립된 D88
 - 재생성된 KANJI1 ROM
-- 단계별 검증 로그와 구조 보고서
 
-기본 출력은 `output/` 아래에 생성합니다. `--out`으로 지정한 출력 디렉터리도 Git 제외 경로에서 관리합니다.
+기본 출력은 저장소 루트에 생성합니다. `--out`으로 다른 출력 디렉터리를 지정할 수 있습니다.
 
-원본 D88·ROM은 로컬 `import/` 또는 직접 지정한 경로에서 읽고, 출력 매체 이미지는
-`output/` 또는 직접 지정한 출력 경로에 둡니다. `.gitignore`는 `import/`, D88/ROM
-확장자와 생성 출력 디렉터리를 제외합니다. `source/GFX/`의 편집용 PNG만 빌드에
-필요한 그래픽 입력으로 저장소에서 관리합니다.
+원본 D88·ROM은 로컬 `import/` 또는 직접 지정한 경로에서 읽습니다.
 
 ## 3. 확정 소스의 구성
 
@@ -76,12 +72,10 @@ PYTHONPATH=. python -m tools.valis_rebuild export-original \
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build-d88 \
-  --d88 import \
-  --out output/d88
+  --d88 import
 
 PYTHONPATH=. python -m tools.valis_rebuild build-rom \
-  --rom import \
-  --out output/kanji
+  --rom import
 ```
 
 `build-d88`와 통합 `build`는 `source/tables/logo/source-map.csv`에서 지정한 `source/GFX/` PNG를 입력으로 사용합니다. 기본 픽셀 상태에서는 검토된 기존 로고 바이트를 사용하며, 편집한 PNG 그룹은 표에 정의된 영역만 재인코딩합니다.
@@ -91,21 +85,20 @@ PYTHONPATH=. python -m tools.valis_rebuild build-rom \
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build \
   --d88 import \
-  --rom import \
-  --out output
+  --rom import
 ```
 
 ### 검증
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 output/d88 \
-  --rom output/kanji
+  --d88 . \
+  --rom .
 
 PYTHONPATH=. python -m unittest discover -s tests -v
 ```
 
-빌드 로그에서 입력·출력 해시와 `exact_release_match`를 확인합니다. 동일 입력으로 두 번 만든 출력의 SHA-256이 같아야 재현성이 성립합니다. 완료본과의 바이트 비교는 마지막 진단 단계이며, 비교 결과가 소스 데이터를 갱신하지 않습니다.
+명령 출력의 SHA-256과 `exact_release_match`를 확인합니다. 완료본과의 바이트 비교는 `compare` 명령으로 실행합니다.
 
 ## 5. 직접 바이트 기록
 

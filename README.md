@@ -46,8 +46,7 @@ PYTHONPATH=. python -m unittest discover -s tests -v
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build \
   --d88 import \
-  --rom import \
-  --out output
+  --rom import
 ```
 
 로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽습니다. 픽셀 변경이 있는 그룹만 재인코딩합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
@@ -56,32 +55,31 @@ PYTHONPATH=. python -m tools.valis_rebuild build \
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build-rom \
-  --rom import \
-  --out output
+  --rom import
 ```
 
-입력은 기록된 원본 SHA-256과 크기로 검증합니다. 빌드는 476개 글리프를 적용하고 입력 일치 여부와 출력 해시를 보고서에 기록합니다.
+KANJI1 ROM에 476개 글리프를 적용합니다.
 
 출력을 검증합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 output/d88 \
-  --rom output/kanji
+  --d88 . \
+  --rom .
 ```
 
 결과를 기준 파일과 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built output/d88 \
+  --built . \
   --reference 결과 \
   --fail-on-diff
 ```
 
 ## 결과물과 보관 범위
 
-원본 D88·KANJI1 ROM은 로컬 `import/` 또는 사용자가 지정한 위치에서 읽고, 생성된 D88·ROM은 로컬 `output/` 또는 사용자가 지정한 출력 디렉터리에 둡니다. 매체 이미지와 빌드 산출물은 Git에 추가하거나 푸시하지 않습니다. 저장소에 포함되는 그래픽 파일은 `source/GFX/`의 편집용 로고 PNG입니다.
+원본 D88·KANJI1 ROM은 로컬 `import/` 또는 사용자가 지정한 위치에서 읽고, 생성된 D88·ROM은 기본적으로 저장소 루트에 둡니다. 매체 이미지와 빌드 산출물은 Git에 추가하거나 푸시하지 않습니다. 저장소에 포함되는 그래픽 파일은 `source/GFX/`의 편집용 로고 PNG입니다.
 
 ## 문서
 

@@ -31,6 +31,6 @@
 ```text
 PYTHONPATH=. python -m tools.valis_rebuild source-lint
 PYTHONPATH=. python -m tools.valis_rebuild text-lint
-PYTHONPATH=. python -m tools.valis_rebuild build --d88 import --rom import --out output
-PYTHONPATH=. python -m tools.valis_rebuild verify --d88 output/d88 --rom output/kanji
+PYTHONPATH=. python -m tools.valis_rebuild build --d88 import --rom import
+PYTHONPATH=. python -m tools.valis_rebuild verify --d88 . --rom .
 ```
