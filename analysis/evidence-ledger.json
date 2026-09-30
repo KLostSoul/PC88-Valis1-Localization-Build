@@ -38,7 +38,7 @@
       "assertion": "The accepted KANJI source contains 476 explicit 16x16 1bpp TXT glyphs with explicit token, slot and ROM offset fields.",
       "source_documents": ["Valis_KANJI1_16x16_EDITKIT_476_SIMPLIFIED_UNDO_REDO_BATCHFIX_2026-08-04/README_SIMPLIFIED_KO.txt"],
       "source_location": "glyphs_edit_16x16_txt_visual and edit-kit README",
-      "literal_observation": "476 files; each source has 16 rows of 16 cells; slot*0x20 equals the filename ROM offset; generated ROM sha256=3a4ce60dc4a23d7918a8726b99c2192c9420313bab40c50880eea3a387243f45",
+      "literal_observation": "476 files; each source has 16 rows of 16 cells; slot*0x20 equals the filename ROM offset; using the recorded original KANJI1 SHA-256 7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb generates KANJI1(K).ROM SHA-256 6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a",
       "address_layer": "rom_offset",
       "status": "confirmed",
       "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
@@ -90,10 +90,10 @@
     {
       "id": "LOGO-RAW-MAP",
       "component": "title_logo",
-      "assertion": "The logo source map has explicit RAM addresses, decoder call maps, and raw D88 old/new offsets for the user-edit result.",
+      "assertion": "The logo source map declares editable PNGs, groups, planes, RAM source ranges, dimensions, encoders, and baseline pixel hashes; separate maps retain decoder and D88 raw-address evidence.",
       "source_documents": ["Logo/Valis_opening_logo_CG_analysis_2026-07-03_UPDATED_VALIS_LOGO_SUCCESS_FINAL.docx", "Logo/valis_title_cg_original_user_editing_kit_png_stdlib_2026-07-03.zip/build_user_edit/changed_bytes.csv"],
       "source_location": "source/tables/logo",
-      "literal_observation": "7595 raw rows; all old_raw values match original D88; target ranges include 0x2800..0x4166, 0x4167..0x4404 and 0x4405..0x47E2; decoders are 05CE and 061F",
+      "literal_observation": "The external editing-kit report records 7,595 changed raw bytes; the accepted runtime raw-changes table has 7,521 rows. The mapped target ranges are 0x2800..0x4166, 0x4167..0x4404 and 0x4405..0x47E2; decoders are 05CE and 061F.",
       "address_layer": "runtime_main_and_d88_file_data",
       "status": "confirmed",
       "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}

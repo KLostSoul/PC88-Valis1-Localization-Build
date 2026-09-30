@@ -1,4 +1,6 @@
 {
+  "role": "historical_edit_kit_report_not_used_by_build",
+  "note": "This report describes an earlier user-edit result. Current build inputs and settings are declared in source-map.csv; release hashes are declared in source/release-baseline.json.",
   "base_d88": "baseline_ORIGINAL.d88",
   "targets": [
     {

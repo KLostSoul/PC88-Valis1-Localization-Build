@@ -8,6 +8,7 @@
 *.zip
 *.ZIP
 upload/
+import/
 reference_work_*/
 nested_extract_*/
 analysis/local_only/

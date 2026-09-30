@@ -36,7 +36,12 @@ def _byte(value: str, field: str, row: int) -> int:
     return result
 
 
-def load_raw_writes(path: str | Path, component: str) -> list[RawWrite]:
+def load_raw_writes(
+    path: str | Path,
+    component: str,
+    *,
+    skip_ram_ranges: tuple[tuple[int, int], ...] = (),
+) -> list[RawWrite]:
     rows: list[RawWrite] = []
     with Path(path).open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -48,6 +53,13 @@ def load_raw_writes(path: str | Path, component: str) -> list[RawWrite]:
         else:
             raise BuildError(f"{path} is missing explicit raw write columns")
         for row_number, row in enumerate(reader, 2):
+            if skip_ram_ranges:
+                try:
+                    ram_address = int(row["ram_addr"], 16)
+                except (KeyError, TypeError, ValueError) as exc:
+                    raise BuildError(f"invalid ram_addr at CSV row {row_number}") from exc
+                if any(start <= ram_address < end for start, end in skip_ram_ranges):
+                    continue
             try:
                 offset = int(row[offset_field], 16)
             except (KeyError, ValueError) as exc:
@@ -61,15 +73,21 @@ def load_raw_writes(path: str | Path, component: str) -> list[RawWrite]:
                 raw_old=_byte(row[old_field], "raw_old", row_number),
                 raw_new=_byte(row[new_field], "raw_new", row_number),
             ))
-    if not rows:
+    if not rows and not skip_ram_ranges:
         raise BuildError(f"empty literal raw source table: {path}")
     return rows
 
 
-def apply_raw_tables(image: D88Image, tables: list[tuple[str, str | Path]]) -> list[dict]:
+def apply_raw_tables(
+    image: D88Image,
+    tables: list[tuple[str, str | Path]],
+    *,
+    skip_ram_ranges: dict[str, tuple[tuple[int, int], ...]] | None = None,
+) -> list[dict]:
     writes: list[RawWrite] = []
     for component, path in tables:
-        writes.extend(load_raw_writes(path, component))
+        ranges = (skip_ram_ranges or {}).get(component, ())
+        writes.extend(load_raw_writes(path, component, skip_ram_ranges=ranges))
     offsets: dict[int, RawWrite] = {}
     reports: dict[str, dict] = {}
     for write in writes:

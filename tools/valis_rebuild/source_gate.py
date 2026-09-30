@@ -1,7 +1,7 @@
-"""Strict gates between manual analysis and the build graph.
+"""Strict gates between manual analysis, accepted source metadata, and builds.
 
-This module deliberately does not parse project documents or infer source
-rows. It validates only hand-authored ledger and acceptance metadata.
+This module does not parse project documents or infer source rows. It validates
+the hand-authored ledger, accepted source metadata, and declared logo inputs.
 """
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from .errors import BuildError
+from .logo import lint_logo_inputs
 from .text_sources import lint_text_sources
 
 
@@ -154,13 +155,18 @@ def lint_all(repo_root: str | Path) -> dict:
     ledger = lint_ledger(repo_root)
     manifest = lint_source_manifest(repo_root)
     release = lint_release_baseline(repo_root)
+    try:
+        logos = lint_logo_inputs(repo_root)
+    except (BuildError, OSError, ValueError) as exc:
+        logos = {"errors": [str(exc)], "status": "BLOCKED"}
     text_sources = lint_text_sources(repo_root)
     return {
         "ledger": ledger,
         "source_manifest": manifest,
         "release_baseline": release,
+        "logo_inputs": logos,
         "text_sources": text_sources,
-        "status": "OK" if ledger["status"] == "OK" and manifest["buildable"] and release["status"] == "OK" and text_sources["status"] == "OK" else "BLOCKED",
+        "status": "OK" if ledger["status"] == "OK" and manifest["buildable"] and release["status"] == "OK" and logos["status"] == "OK" and text_sources["status"] == "OK" else "BLOCKED",
     }
 
 

@@ -154,10 +154,10 @@ def command_compare(args: argparse.Namespace) -> dict:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="valis-rebuild",
-        description="원본 D88/ROM에 확정 리터럴 바이트를 직접 적용하는 한국어 한글패치 재현 빌드 도구",
+        description="검토된 원천과 로고 PNG를 원본 D88/ROM에 반영하는 한국어 한글패치 재현 빌드 도구",
     )
     sub = parser.add_subparsers(dest="command", required=True)
-    lint = sub.add_parser("source-lint", help="확정 소스·근거·릴리스 계약 검사")
+    lint = sub.add_parser("source-lint", help="확정 소스·근거·릴리스·로고 PNG 설정 검사")
     lint.set_defaults(handler=command_source_lint)
     text_lint = sub.add_parser("text-lint", help="원문·한글 번역·토큰 행 검사")
     text_lint.set_defaults(handler=command_text_lint)
@@ -165,7 +165,7 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
     export.add_argument("--out", default="build/export-original", help="구조 보고서 출력 디렉터리")
     export.set_defaults(handler=command_export_original)
-    build_d88 = sub.add_parser("build-d88", help="원본 D88에 확정 raw 변경을 직접 적용")
+    build_d88 = sub.add_parser("build-d88", help="원본 D88에 확정 raw 변경과 GFX 로고 PNG 반영")
     build_d88.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
     build_d88.add_argument("--out", default="build/reproduction/d88", help="D88 출력 디렉터리")
     build_d88.set_defaults(handler=command_build_d88)
@@ -178,7 +178,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="ROM 크기 검증 후 기준 해시가 다른 원본도 허용하고 결과 보고서에 차이를 기록",
     )
     build_rom.set_defaults(handler=command_build_rom)
-    build = sub.add_parser("build", help="D88와 KANJI1을 함께 재현 빌드")
+    build = sub.add_parser("build", help="D88 로고 PNG와 KANJI1을 함께 재현 빌드")
     build.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
     build.add_argument("--rom", required=True, help="사용자가 제공한 원본 KANJI1 ROM 경로")
     build.add_argument("--out", default="build/reproduction", help="통합 출력 디렉터리")

@@ -34,7 +34,7 @@ class SourceComponentTests(unittest.TestCase):
         output, _ = build_rom(ORIGINAL_ROM.read_bytes(), assignments)
         self.assertEqual(
             __import__("hashlib").sha256(output).hexdigest(),
-            "3a4ce60dc4a23d7918a8726b99c2192c9420313bab40c50880eea3a387243f45",
+            "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a",
         )
 
     def test_text_source_index_has_original_translation_and_all_segment_sets(self):
@@ -79,7 +79,7 @@ class SourceComponentTests(unittest.TestCase):
             )
             self.assertEqual(disk["output"]["path"], str(output / "d88" / "valis_disk_a(K).d88"))
             self.assertTrue(kanji["exact_release_match"])
-            self.assertEqual(kanji["output"]["sha256"], "3a4ce60dc4a23d7918a8726b99c2192c9420313bab40c50880eea3a387243f45")
+            self.assertEqual(kanji["output"]["sha256"], "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a")
             self.assertEqual(kanji["output"]["path"], str(output / "kanji" / "KANJI1(K).ROM"))
 
 

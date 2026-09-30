@@ -4,13 +4,13 @@
   "input": {
     "d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
     "d88_size": 414992,
-    "kanji1_sha256": "f6c1c5022fe5935f6dfa3eb919e51441e75191270b639edcb7938b3bce41f6a3",
+    "kanji1_sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
     "kanji1_size": 131072
   },
   "output": {
     "d88_sha256": "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8",
     "d88_size": 414992,
-    "kanji1_sha256": "3a4ce60dc4a23d7918a8726b99c2192c9420313bab40c50880eea3a387243f45",
+    "kanji1_sha256": "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a",
     "kanji1_size": 131072
   },
   "component_contract": {

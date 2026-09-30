@@ -1,7 +1,7 @@
-﻿target,ram_source,size,edit_png,encoder,notes
-VALIS_LOGO_5D_red_body,2800~4166,6503 bytes total,edit_layers/VALIS_5D_red_body_640x119_EDIT_1x.png,061F,"5D red body plane, row-interleaved with 5E"
-VALIS_LOGO_5E_shadow_mask,2800~4166,6503 bytes total,edit_layers/VALIS_5E_black_shadow_mask_640x119_EDIT_1x.png,061F,"5E black shadow/mask plane, not NOT(5D)"
-MUGEN_FINAL_5C,4405~47E2,990 bytes total,edit_layers/MUGEN_FINAL_5C_200x24_EDIT_1x.png,061F,final fixed 5C plane
-MUGEN_FINAL_5D,4405~47E2,990 bytes total,edit_layers/MUGEN_FINAL_5D_200x24_EDIT_1x.png,061F,final fixed 5D plane
-MUGEN_FINAL_5E,4405~47E2,990 bytes total,edit_layers/MUGEN_FINAL_5E_200x24_EDIT_1x.png,061F,final fixed 5E plane
-MUGEN_MOVEMENT_05CE,4167~4404,670 bytes,edit_layers/MUGEN_MOVEMENT_05CE_columns_520x24_EDIT_1x.png,05CE,65 vertical slices x 24 rows
+target,group,plane,ram_base,source_length,width,height,edit_png,encoder,baseline_pixels_sha256,notes
+VALIS_LOGO_5D_red_body,valis_logo,5D,0x2800,6503,640,119,../../GFX/VALIS_5D_red_body_640x119_EDIT_1x.png,061F,647936fb3a82233819cbf2ba976bbcdb3ee8f95d2602b70a9f40346080e9ea1d,"5D red body plane, row-interleaved with 5E"
+VALIS_LOGO_5E_shadow_mask,valis_logo,5E,0x2800,6503,640,119,../../GFX/VALIS_5E_black_shadow_mask_640x119_EDIT_1x.png,061F,45825f9c47d8729701ead0d8205534bd6d4710d0989a97303e80a7bd454c9e0c,"5E black shadow/mask plane, not NOT(5D)"
+MUGEN_FINAL_5C,mugen_final,5C,0x4405,990,200,24,../../GFX/MUGEN_FINAL_5C_200x24_EDIT_1x.png,061F,5766e0ac8dc9d16ccddfeb6d27d0031cabb27b7a573d3f1c44da41909542e72c,final fixed 5C plane
+MUGEN_FINAL_5D,mugen_final,5D,0x4405,990,200,24,../../GFX/MUGEN_FINAL_5D_200x24_EDIT_1x.png,061F,b9c235706ffedfc7199e95f410053ae5efe73f7b50d2445fc668c90aa98d798b,final fixed 5D plane
+MUGEN_FINAL_5E,mugen_final,5E,0x4405,990,200,24,../../GFX/MUGEN_FINAL_5E_200x24_EDIT_1x.png,061F,a4515402de2acf33ac26156ac3c5c6eb34689d320ff3a85484b0b676544d61df,final fixed 5E plane
+MUGEN_MOVEMENT_05CE,mugen_movement,column,0x4167,670,520,24,../../GFX/MUGEN_MOVEMENT_05CE_columns_520x24_EDIT_1x.png,05CE,e3cdf4b32166f9f7aa07c283cd815d8aef0a79446f3eed5b4f4f1817d6849abb,65 vertical slices x 24 rows

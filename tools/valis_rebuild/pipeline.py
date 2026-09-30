@@ -9,6 +9,7 @@ from pathlib import Path
 from .d88 import D88Image
 from .gameover import apply_gameover
 from .kanji import build_rom, load_assignments
+from .logo import apply_logo_build, prepare_logo_build
 from .serializer import apply_hold_patch, apply_raw_tables
 from .source_gate import require_buildable
 
@@ -63,9 +64,17 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
     baseline = _baseline(root)
     _require_input(input_path, baseline["input"]["d88_sha256"], baseline["input"]["d88_size"], "D88 input")
     image = D88Image.read(input_path)
+    logo_plan = prepare_logo_build(root)
     component_reports = []
     component_reports.extend(apply_gameover(image, root / "source"))
-    component_reports.extend(apply_raw_tables(image, _disk_tables(root)))
+    component_reports.extend(apply_raw_tables(
+        image,
+        _disk_tables(root),
+        skip_ram_ranges={"logo": logo_plan.skipped_ram_ranges},
+    ))
+    logo_report = apply_logo_build(image, logo_plan)
+    if logo_report is not None:
+        component_reports.append(logo_report)
     component_reports.append(apply_hold_patch(image, root / "source/tables/gameover/hold-34-35.json"))
     output_dir.mkdir(parents=True, exist_ok=True)
     output = output_dir / "valis_disk_a(K).d88"

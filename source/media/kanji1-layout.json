@@ -2,7 +2,7 @@
   "schema": "valis-kanji1-layout/v1",
   "input": {
     "name": "KANJI1 original ROM",
-    "sha256": "f6c1c5022fe5935f6dfa3eb919e51441e75191270b639edcb7938b3bce41f6a3",
+    "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
     "size": 131072
   },
   "geometry": {"slot_count": 4096, "glyph_bytes": 32, "width": 16, "height": 16, "bpp": 1},
