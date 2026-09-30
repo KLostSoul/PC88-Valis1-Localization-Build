@@ -9,8 +9,8 @@
   "raw_old": "5C",
   "raw_new": "4A",
   "source": {
-    "document": "Valis1_PC88_Localization_Skills_IPS_Only_2026-08-09/skills/patch-valis1-pc88-ko/references/ending-staffroll-logo.md",
-    "observation": "Final one-byte hold reduction; earlier hook/counter paths rejected."
+    "document": "docs/evidence-and-source-map.md#gameover",
+    "observation": "The build verifies the declared sector and original byte before applying this one-byte change."
   },
   "review": "confirmed"
 }
