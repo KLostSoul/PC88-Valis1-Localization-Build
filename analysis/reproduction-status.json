@@ -56,8 +56,9 @@
     },
     "final_component_updates": {
       "gameover_scroll_token_rows": 24,
-      "logo_raw_rows": 7521,
-      "logo_raw_rows_role": "accepted baseline literal rows; edited PNG groups use source-map plus RAM-to-raw mapping",
+      "logo_png_inputs": 6,
+      "logo_source_groups": 3,
+      "logo_encoded_source_bytes": 8163,
       "event_raw_byte_updates": 11,
       "error07_raw_byte_updates": 11
     }

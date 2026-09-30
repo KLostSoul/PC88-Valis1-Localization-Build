@@ -21,7 +21,9 @@ class SourceGateTests(unittest.TestCase):
     def test_final_component_contract_is_complete(self):
         report = lint_release_baseline(ROOT)
         self.assertEqual(report["status"], "OK")
-        self.assertEqual(report["logo_final_raw_rows"], 7521)
+        self.assertEqual(report["logo_png_inputs"], 6)
+        self.assertEqual(report["logo_source_groups"], 3)
+        self.assertEqual(report["logo_encoded_source_bytes"], 8163)
 
 
 if __name__ == "__main__":

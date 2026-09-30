@@ -20,7 +20,7 @@
 4. 중복·겹침·충돌을 거부합니다.
 5. 출력 파일을 재파싱하고 컴포넌트별 변경 집합과 최종 해시를 확인합니다. 기준 해시와의 일치 여부를 기록하며, `verify`는 현재 소스로 재빌드한 결과를 대조합니다.
 
-로고 PNG는 `source/tables/logo/source-map.csv`에 선언된 경로와 크기를 읽고 픽셀 해시를 확인합니다. 이 표가 그룹, plane, RAM base, source 길이, 인코더까지 빌드 설정의 단일 기준입니다. 기준 이미지와 같으면 검토된 raw 변경표를 쓰고, 편집된 그룹은 061F/05CE로 같은 길이에 재인코딩해 `ram-to-raw-map.csv`를 통해 해당 D88 payload 영역만 교체합니다. PNG 이외의 원본·결과 D88과 ROM은 로컬 입력·출력이며 저장소 산출물이 아닙니다.
+로고 PNG는 `source/tables/logo/source-map.csv`에 선언된 경로와 크기를 읽고 픽셀 해시를 확인합니다. 이 표가 그룹, plane, RAM base, source 길이, 인코더까지 빌드 설정의 단일 기준입니다. 빌더는 매번 PNG 여섯 장을 061F/05CE로 같은 길이의 source stream에 인코딩하고, `ram-to-raw-map.csv`로 D88 payload에 씁니다. PNG 이외의 원본·결과 D88과 ROM은 로컬 입력·출력이며 저장소 산출물이 아닙니다.
 
 ## 구성
 

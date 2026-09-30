@@ -41,7 +41,7 @@ Python 직접 바이너리 기록
 
 ### 로고와 ERROR 07
 
-로고 편집 입력은 `source/GFX/`의 여섯 PNG입니다. `source/tables/logo/source-map.csv`가 각 PNG의 그룹, plane, RAM 시작 주소, source 길이, 크기, 인코더와 기준 픽셀 해시를 선언하며 빌더가 이 값을 그대로 읽습니다. 기본 이미지에서는 `source/tables/logo/raw-changes.csv`의 검토된 최종 raw 바이트를 사용해 릴리스 출력을 그대로 재현하고, 픽셀이 바뀐 그룹은 PNG를 같은 길이의 게임 source stream으로 재인코딩한 뒤 `ram-to-raw-map.csv`와 원본 바이트 가드로 적용합니다. 인코더 call-map 파일은 분석 근거이며 실행 설정이 아닙니다. ERROR 07은 명령 스트림 관찰과 최종 raw 변경표를 별도로 보존합니다.
+로고 입력은 `source/GFX/`의 PNG 여섯 장입니다. `source/tables/logo/source-map.csv`가 각 PNG의 그룹, plane, RAM 시작 주소, source 길이, 크기, 인코더와 기준 픽셀 해시를 선언합니다. 빌더는 매번 PNG를 같은 길이의 게임 source stream으로 인코딩하고, `ram-to-raw-map.csv`의 원본 바이트 가드와 payload 대응으로 D88에 기록합니다. 인코더 call-map 파일은 분석 근거이며 실행 설정이 아닙니다. ERROR 07은 명령 스트림 관찰과 최종 raw 변경표를 별도로 보존합니다.
 
 ### KANJI1
 

@@ -49,7 +49,6 @@ class EncodedLogo:
 
 @dataclass(frozen=True)
 class LogoBuildPlan:
-    skipped_ram_ranges: tuple[tuple[int, int], ...]
     encoded: tuple[EncodedLogo, ...]
     ram_map: dict[int, dict[str, str]]
 
@@ -637,44 +636,29 @@ def lint_logo_inputs(root: str | Path) -> dict:
 
 
 def prepare_logo_build(root: str | Path) -> LogoBuildPlan:
-    """Load GFX PNGs and re-encode only groups whose pixels were edited."""
+    """Encode every logo source group from its declared PNG input."""
     root = Path(root)
-    groups, loaded, _pixel_hashes, changed_groups = _load_logo_images(root)
-
-    if not changed_groups:
-        return LogoBuildPlan((), (), {})
-
+    groups, loaded, _pixel_hashes, _changed_groups = _load_logo_images(root)
     ram_map = _read_ram_map(root)
     encoded: list[EncodedLogo] = []
-    skipped_ranges: list[tuple[int, int]] = []
-    for group in changed_groups:
-        original = _original_source(ram_map, group.base, group.length)
+    for group in groups:
         inputs = tuple(image.edit_png for image in group.images)
         if group.encoder == "061F":
             plane_names = tuple(image.plane for image in group.images)
             planes = {image.plane: loaded[image.target] for image in group.images}
-            original_planes = decode_061f_planes(original, group.width_bytes, group.height, plane_names)
-            if original_planes == planes:
-                source = original
-                handling = "original_reused"
-            else:
-                source = encode_061f_planes(planes, group.width_bytes, group.height,
-                                            plane_names, group.length)
-                handling = "png_encoded"
+            source = encode_061f_planes(planes, group.width_bytes, group.height,
+                                        plane_names, group.length)
+            if decode_061f_planes(source, group.width_bytes, group.height, plane_names) != planes:
+                raise BuildError(f"{group.name} PNG encode/decode roundtrip failed")
         else:
             movement = loaded[group.images[0].target]
-            original_movement = decode_05ce_columns(original, group.width_bytes, group.height)
-            if original_movement == movement:
-                source = original
-                handling = "original_reused"
-            else:
-                source = encode_05ce_columns(movement, group.length, group.width_bytes, group.height)
-                handling = "png_encoded"
+            source = encode_05ce_columns(movement, group.length, group.width_bytes, group.height)
+            if decode_05ce_columns(source, group.width_bytes, group.height) != movement:
+                raise BuildError(f"{group.name} PNG encode/decode roundtrip failed")
         if len(source) != group.length:
             raise BuildError(f"{group.name} source length changed: {len(source)} != {group.length}")
-        encoded.append(EncodedLogo(group.name, group.base, source, group.encoder, inputs, handling))
-        skipped_ranges.append((group.base, group.base + group.length))
-    return LogoBuildPlan(tuple(skipped_ranges), tuple(encoded), ram_map)
+        encoded.append(EncodedLogo(group.name, group.base, source, group.encoder, inputs, "png_encoded"))
+    return LogoBuildPlan(tuple(encoded), ram_map)
 
 
 def apply_logo_build(image: D88Image, plan: LogoBuildPlan) -> dict | None:

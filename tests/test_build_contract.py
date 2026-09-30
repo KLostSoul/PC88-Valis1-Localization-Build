@@ -274,44 +274,50 @@ class MediaContractTests(unittest.TestCase):
             baseline = Path(baseline_result["d88"]["output"]["path"]).read_bytes()
             groups = _read_source_map(root)
             ram_map = _read_ram_map(root)
-            for group in groups:
-                for image in group.images:
-                    with self.subTest(png=image.target):
-                        saved = image.path.read_bytes()
+            saved_images = {}
+            edited_rows = {}
+            try:
+                for group in groups:
+                    for image in group.images:
+                        saved_images[image.path] = image.path.read_bytes()
                         rows = load_binary_png_rows(image.path, group.width_pixels, group.height, group.width_bytes)
                         rows[0][0] ^= 0x80
-                        try:
-                            write_binary_png(image.path, rows)
-                            with patch.object(cli, "repo_root", return_value=root):
-                                result = cli.command_build(argparse.Namespace(
-                                    d88=str(ORIGINAL_D88), rom=str(ORIGINAL_ROM), out=str(root / "output")))
-                            self.assertEqual(result["status"], "OK")
-                            self.assertFalse(result["d88"]["exact_release_match"])
-                            built = Path(result["d88"]["output"]["path"]).read_bytes()
-                            encoded = bytearray()
-                            allowed = set()
-                            for address in range(group.base, group.base + group.length):
-                                mapping = ram_map[address]
-                                offset = int(mapping["raw_file_offset"], 16)
-                                allowed.add(offset)
-                                de = 0x400 - int(mapping["raw_index"], 16)
-                                encoded.append((built[offset] - (de >> 8) - (de & 255) +
-                                                0x40 - int(mapping["d88_c"], 16)) & 255)
-                            self.assertTrue({i for i, (a, b) in enumerate(zip(baseline, built)) if a != b} <= allowed)
-                            if group.encoder == "061F":
-                                actual = decode_061f_planes(bytes(encoded), group.width_bytes, group.height,
-                                                            tuple(item.plane for item in group.images))
-                                self.assertEqual(actual[image.plane], rows)
-                            else:
-                                self.assertEqual(decode_05ce_columns(bytes(encoded), group.width_bytes, group.height), rows)
-                                with patch.object(cli, "repo_root", return_value=root):
-                                    verified = cli.command_verify(argparse.Namespace(
-                                        d88=str(root / "output"), rom=str(root / "output"),
-                                        original_d88=str(ORIGINAL_D88), original_rom=str(ORIGINAL_ROM), report=None))
-                                self.assertTrue(verified["matches_current_source"])
-                            self.assertEqual(len(list((root / "output").iterdir())), 2)
-                        finally:
-                            image.path.write_bytes(saved)
+                        edited_rows[image.target] = rows
+                        write_binary_png(image.path, rows)
+                with patch.object(cli, "repo_root", return_value=root):
+                    result = cli.command_build(argparse.Namespace(
+                        d88=str(ORIGINAL_D88), rom=str(ORIGINAL_ROM), out=str(root / "output")))
+                self.assertEqual(result["status"], "OK")
+                self.assertFalse(result["d88"]["exact_release_match"])
+                built = Path(result["d88"]["output"]["path"]).read_bytes()
+                allowed = set()
+                for group in groups:
+                    encoded = bytearray()
+                    for address in range(group.base, group.base + group.length):
+                        mapping = ram_map[address]
+                        offset = int(mapping["raw_file_offset"], 16)
+                        allowed.add(offset)
+                        de = 0x400 - int(mapping["raw_index"], 16)
+                        encoded.append((built[offset] - (de >> 8) - (de & 255) +
+                                        0x40 - int(mapping["d88_c"], 16)) & 255)
+                    if group.encoder == "061F":
+                        actual = decode_061f_planes(bytes(encoded), group.width_bytes, group.height,
+                                                    tuple(item.plane for item in group.images))
+                        for image in group.images:
+                            self.assertEqual(actual[image.plane], edited_rows[image.target])
+                    else:
+                        actual = decode_05ce_columns(bytes(encoded), group.width_bytes, group.height)
+                        self.assertEqual(actual, edited_rows[group.images[0].target])
+                self.assertTrue({i for i, (a, b) in enumerate(zip(baseline, built)) if a != b} <= allowed)
+                with patch.object(cli, "repo_root", return_value=root):
+                    verified = cli.command_verify(argparse.Namespace(
+                        d88=str(root / "output"), rom=str(root / "output"),
+                        original_d88=str(ORIGINAL_D88), original_rom=str(ORIGINAL_ROM), report=None))
+                self.assertTrue(verified["matches_current_source"])
+                self.assertEqual(len(list((root / "output").iterdir())), 2)
+            finally:
+                for path, content in saved_images.items():
+                    path.write_bytes(content)
 
 
 if __name__ == "__main__":

@@ -270,12 +270,6 @@
       ]
     },
     {
-      "path": "source/tables/logo/raw-changes.csv",
-      "review_ids": [
-        "LOGO-RAW-MAP"
-      ]
-    },
-    {
       "path": "source/tables/logo/source-map.csv",
       "review_ids": [
         "LOGO-RAW-MAP"

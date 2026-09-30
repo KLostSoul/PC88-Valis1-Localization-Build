@@ -43,7 +43,7 @@
 | 제어 토큰 | `source/tables/tokens/` | 제어 바이트와 일반 문자 바이트의 구분 |
 | 역어셈 관찰 | `source/asm/` | 수정 이유와 실행 위치를 설명하는 참고 기록 |
 
-직접 바이트 컴포넌트는 최종 원시 변경표가 원본→결과 계약입니다. 로고 설정은 `source/tables/logo/source-map.csv` 한 곳에 모으며, 빌더가 이 표로 이미지 그룹, plane, RAM 주소, 길이, 해상도와 인코더를 구성합니다. PNG가 편집된 경우에는 해당 RAM 범위의 `raw-changes.csv` 행을 건너뛰고 재인코딩한 source stream을 검증된 RAM-to-raw 매핑에 씁니다. 기본 PNG 상태에서는 검토된 raw 표를 그대로 사용합니다. 별도의 사후 통합 덮어쓰기 표는 두지 않습니다.
+직접 바이트 컴포넌트는 최종 원시 변경표가 원본→결과 계약입니다. 로고 설정은 `source/tables/logo/source-map.csv` 한 곳에 모으며, 빌더가 이 표로 이미지 그룹, plane, RAM 주소, 길이, 해상도와 인코더를 구성합니다. 빌더는 PNG 여섯 장을 매번 인코딩하고, 검증된 RAM-to-raw 매핑을 통해 D88에 씁니다.
 
 ## 4. 단계별 명령
 

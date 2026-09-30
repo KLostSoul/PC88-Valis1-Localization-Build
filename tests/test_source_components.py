@@ -81,10 +81,11 @@ class SourceComponentTests(unittest.TestCase):
             kanji = build_kanji(ROOT, ORIGINAL_ROM, output)
             self.assertEqual(disk["structure"], {"sectors": 422, "flat_payload": 407552})
             self.assertTrue(disk["exact_release_match"])
-            self.assertEqual(
-                disk["output"]["sha256"],
-                "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8",
-            )
+            self.assertEqual(disk["output"]["sha256"], "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8")
+            logo = next(component for component in disk["component_reports"] if component["component"] == "logo_png")
+            self.assertEqual(len(logo["targets"]), 3)
+            self.assertTrue(all(group["source_handling"] == "png_encoded" for group in logo["targets"]))
+            self.assertEqual(logo["writes"], 8163)
             self.assertEqual(disk["output"]["path"], str(output / "valis_disk_a(K).d88"))
             self.assertTrue(kanji["exact_release_match"])
             self.assertEqual(kanji["output"]["sha256"], "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a")

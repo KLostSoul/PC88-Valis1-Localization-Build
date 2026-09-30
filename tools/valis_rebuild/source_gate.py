@@ -190,12 +190,14 @@ def lint_release_baseline(repo_root: str | Path) -> dict:
     contract = doc.get("component_contract")
     if not isinstance(contract, dict):
         errors.append("missing final component contract")
-    required_contract = {"rule", "logo_final_raw_rows", "gameover_scroll_records", "event_final_raw_updates", "error07_final_raw_updates"}
+    required_contract = {"rule", "logo_png_inputs", "logo_source_groups", "logo_encoded_source_bytes", "gameover_scroll_records", "event_final_raw_updates", "error07_final_raw_updates"}
     if isinstance(contract, dict) and not required_contract.issubset(contract):
         errors.append("final component contract is incomplete")
     return {
         "path": str(path.relative_to(root)),
-        "logo_final_raw_rows": contract.get("logo_final_raw_rows") if isinstance(contract, dict) else None,
+        "logo_png_inputs": contract.get("logo_png_inputs") if isinstance(contract, dict) else None,
+        "logo_source_groups": contract.get("logo_source_groups") if isinstance(contract, dict) else None,
+        "logo_encoded_source_bytes": contract.get("logo_encoded_source_bytes") if isinstance(contract, dict) else None,
         "errors": errors,
         "status": "OK" if not errors else "INVALID",
     }

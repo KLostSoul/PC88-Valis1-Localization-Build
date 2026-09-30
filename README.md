@@ -45,7 +45,7 @@ python -m unittest discover -s tests -v
 python -m tools.valis_rebuild build --d88 import --rom import
 ```
 
-로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽습니다. 픽셀 변경이 있는 그룹만 재인코딩합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
+로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽고 PNG 여섯 장을 매번 인코딩합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
 
 원본 KANJI1 ROM이 들어 있는 `import/` 폴더를 지정해 글리프 ROM만 만들 수도 있습니다.
 

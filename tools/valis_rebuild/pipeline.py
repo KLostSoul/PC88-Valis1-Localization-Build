@@ -72,7 +72,6 @@ def _disk_tables(root: Path) -> list[tuple[str, Path]]:
     tables += [
         ("ending_1_24", root / "source/tables/ending/raw-changes.csv"),
         ("error07", root / "source/tables/error07/raw-changes.csv"),
-        ("logo", root / "source/tables/logo/raw-changes.csv"),
     ]
     return tables
 
@@ -89,7 +88,6 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
     component_reports.extend(apply_raw_tables(
         image,
         _disk_tables(root),
-        skip_ram_ranges={"logo": logo_plan.skipped_ram_ranges},
     ))
     logo_report = apply_logo_build(image, logo_plan)
     if logo_report is not None:

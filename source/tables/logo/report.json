@@ -2,8 +2,7 @@
   "schema": "valis-logo-source-validation/v1",
   "source_tables": [
     "source/tables/logo/source-map.csv",
-    "source/tables/logo/ram-to-raw-map.csv",
-    "source/tables/logo/raw-changes.csv"
+    "source/tables/logo/ram-to-raw-map.csv"
   ],
   "groups": [
     {
@@ -30,9 +29,10 @@
   ],
   "png_inputs": 6,
   "ram_map_rows": 14682,
-  "raw_byte_writes": 7521,
+  "encoded_source_bytes": 8163,
   "verification": {
     "reverse_map_roundtrip": true,
+    "png_encode_roundtrip": true,
     "baseline_pixels_match": true
   }
 }
