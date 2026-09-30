@@ -1,37 +1,12 @@
 {
-  "body_range": "0x9680~0x99E9",
-  "body_length_bytes": 874,
-  "terminator_expected": "0x99EA=0F",
-  "remaining_bytes_against_0x9A7F": 150,
-  "stats": {
-    "data_rows": 411,
-    "character_rows": 351,
-    "control_rows": 60,
-    "orange_hangul_speech_rows": 73,
-    "green_hangul_general_rows": 163,
-    "punctuation_or_space_rows": 115,
-    "left_quote_88_22_rows": 1,
-    "right_quote_98_22_rows": 1,
-    "existing_control_bytes_preserved_rows": 60,
-    "existing_nonhangul_bytes_preserved_rows": 0,
-    "blank_or_deleted_rows_ignored": 0,
-    "final_character_slots": 351
-  },
-  "rules": {
-    "orange_hangul_rows": "speech-ready token: first_byte&08h=0 and second_byte>=17h",
-    "green_hangul_rows": "general token: first byte OR 08h from speech token",
-    "space": "18 12",
-    "left_quote": "88 22",
-    "right_quote": "98 22"
-  },
+  "schema": "valis-event-text-validation/v1",
+  "source_table": "source/text/event-block-6-korean.jsonl",
+  "audit_table": "source/tables/events/block-6-audit.csv",
+  "rows": 411,
+  "token_bytes": 874,
   "verification": {
-    "bad_rule_count": 0,
-    "warning_count": 0,
-    "warnings": [],
-    "control_bytes_preserved": true,
-    "addresses_reassigned_by_length_column": true,
-    "sequence_reassigned_by_row_order": true,
-    "slots_reassigned_by_character_row_order": true,
-    "character_bytes_reassigned": true
+    "row_numbers_contiguous": true,
+    "token_lengths_match_ranges": true,
+    "tokens_match_audit_and_raw_tables": true
   }
 }

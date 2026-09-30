@@ -1,37 +1,38 @@
 {
-  "role": "historical_edit_kit_report_not_used_by_build",
-  "note": "This report describes an earlier user-edit result. Current build inputs and settings are declared in source-map.csv; release hashes are declared in source/release-baseline.json.",
-  "base_d88": "baseline_ORIGINAL.d88",
-  "targets": [
+  "schema": "valis-logo-source-validation/v1",
+  "source_tables": [
+    "source/tables/logo/source-map.csv",
+    "source/tables/logo/ram-to-raw-map.csv",
+    "source/tables/logo/raw-changes.csv"
+  ],
+  "groups": [
     {
       "name": "valis_logo",
-      "source": "2800-4166",
-      "length": 6503,
-      "encoder": "061F",
-      "roundtrip": "OK",
-      "raw_reverse": "OK",
-      "source_handling": "edited_encoded"
+      "source_length": 6503,
+      "width": 640,
+      "height": 119,
+      "encoder": "061F"
     },
     {
       "name": "mugen_final",
-      "source": "4405-47E2",
-      "length": 990,
-      "encoder": "061F",
-      "roundtrip": "OK",
-      "raw_reverse": "OK",
-      "source_handling": "edited_encoded"
+      "source_length": 990,
+      "width": 200,
+      "height": 24,
+      "encoder": "061F"
     },
     {
       "name": "mugen_movement",
-      "source": "4167-4404",
-      "length": 670,
-      "encoder": "05CE",
-      "roundtrip": "OK",
-      "raw_reverse": "OK",
-      "source_handling": "edited_encoded"
+      "source_length": 670,
+      "width": 520,
+      "height": 24,
+      "encoder": "05CE"
     }
   ],
-  "out_d88": "Valis_title_user_edit_patch.d88",
-  "out_d88_sha256": "8e38dc6ca38a23feb68255bb6e99da45c2aef39ff5ed440dde517fddcf223227",
-  "changed_raw_bytes": 7595
+  "png_inputs": 6,
+  "ram_map_rows": 14682,
+  "raw_byte_writes": 7521,
+  "verification": {
+    "reverse_map_roundtrip": true,
+    "baseline_pixels_match": true
+  }
 }

@@ -1,57 +1,13 @@
 {
-  "purpose": "FINAL Block 2 Korean patch from recalculated 1653-row document after user-deleted unnecessary row; orange dialogue rows use speech tokens; quotes are confirmed “=88 22, ”=98 22.",
-  "runtime_range_written": "0x9680~0xA4F5",
-  "body_runtime_range": "0x9680~0xA4F4",
-  "terminator": "0xA4F5=0F",
-  "decoded_bytes_written": 3702,
-  "document_validation": {
-    "data_rows": 1653,
-    "character_rows": 1471,
-    "control_rows": 182,
-    "orange_hangul_speech_rows": 702,
-    "nonorange_hangul_general_rows": 278,
-    "left_quote_88_22_rows": 10,
-    "right_quote_98_22_rows": 10,
-    "bad_doc_rule_count": 0,
-    "unknown_count": 0
-  },
-  "payload_map": [
-    {
-      "runtime": "0x9680~0x9A7F",
-      "payload": "0x1AAC0~0x1AEBF",
-      "key": "0x2A"
-    },
-    {
-      "runtime": "0x9A80~0x9E7F",
-      "payload": "0x1AED0~0x1B2CF",
-      "key": "0x2A"
-    },
-    {
-      "runtime": "0x9E80~0xA27F",
-      "payload": "0x1B2E0~0x1B6DF",
-      "key": "0x2A"
-    },
-    {
-      "runtime": "0xA280~0xA67F",
-      "payload": "0x1B6F0~0x1BAEF",
-      "key": "0x2A"
-    }
-  ],
-  "changes": {
-    "changed_byte_count": 3536,
-    "changed_records_count": 3536,
-    "min_changed_offset": "0x1AAC0",
-    "max_changed_offset": "0x1BAEF",
-    "outside_payload_change_count": 0
-  },
+  "schema": "valis-event-source-validation/v1",
+  "source_table": "source/tables/events/block-2-raw-changes.csv",
+  "logical_rows": 1640,
+  "raw_byte_writes": 3536,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decoded_after_matches_document_stream": true,
-    "mismatch_count": 0,
-    "only_declared_payload_segments_changed": true,
-    "file_size_unchanged": true
-  },
-  "file_size_original": 414992,
-  "file_size_output": 414992,
-  "sha256_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-  "sha256_output": "d46345e92ef07d97ae78323da3127fb1195c05ea5408bc48e10021cdbfb351c1"
+    "unique_disk_offsets": true,
+    "raw_old_matches_input": true,
+    "decoded_bytes_match_raw": true,
+    "writes_inside_payload": true
+  }
 }

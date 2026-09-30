@@ -1,13 +1,12 @@
-import os
 from pathlib import Path
 import unittest
 
 from tools.valis_rebuild.d88 import D88Image
+from tests.media_inputs import original_media
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_D88 = ROOT.parent / "upload" / "Mugen Senshi Valis (1986)(Nihon Telenet)(Disk 1 of 2)(1).d88"
-D88_PATH = Path(os.environ.get("VALIS_ORIGINAL_D88", DEFAULT_D88))
+D88_PATH = original_media("d88")
 
 
 @unittest.skipUnless(D88_PATH.exists(), "original D88 is not supplied")

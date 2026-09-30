@@ -32,8 +32,5 @@
 - `raw-changes.csv`: 로고를 편집하지 않았을 때 쓰는 확정 기본 D88 바이트
 - `ram-to-raw-map.csv`: source RAM 주소와 D88 payload 간 역매핑 및 원본 바이트 가드
 - `valis-call-map.csv`, `mugen-fixed-call-map.csv`, `mugen-movement-call-map.csv`: 인코더 분석 근거이며 런타임 빌드 입력은 아님
-- `report.json`: 과거 편집 키트 결과 기록이며 현재 빌드의 설정이나 릴리스 기준이 아님
+- `report.json`: 소스 표·PNG·역매핑 검수 기록
 - `source/GFX/*.png`: 저장소에 포함되는 편집 가능 빌드 입력
-
-원본 D88·KANJI1 ROM과 생성한 D88·ROM은 로컬 `import/`, `output/` 또는 사용자가
-지정한 출력 디렉터리에 두며 저장소에 넣지 않는다.

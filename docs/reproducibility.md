@@ -6,35 +6,28 @@
 
 ## 실행 순서
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild source-lint
-PYTHONPATH=. python -m tools.valis_rebuild text-lint
-PYTHONPATH=. python -m unittest discover -s tests -v
+```console
+python -m tools.valis_rebuild source-lint
+python -m tools.valis_rebuild text-lint
+python -m unittest discover -s tests -v
 ```
 
 빌더는 입력 크기와 SHA-256을 기준 레이아웃과 대조합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild build \
-  --d88 import \
-  --rom import
+```console
+python -m tools.valis_rebuild build --d88 import --rom import
 ```
 
 출력 검증은 다음과 같습니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 output \
-  --rom output
+```console
+python -m tools.valis_rebuild verify --d88 output --rom output
 ```
 
 빌드 결과를 기준 D88과 바이트 단위로 대조합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built output \
-  --reference 결과 \
-  --fail-on-diff
+```console
+python -m tools.valis_rebuild compare --built output --reference 결과 --fail-on-diff
 ```
 
 ## 검증 단계의 의미
@@ -46,7 +39,9 @@ PYTHONPATH=. python -m tools.valis_rebuild compare \
 | `export-original` | 원본 D88 트랙·섹터·payload 구조 | 없음 |
 | `build-d88` | 원본 가드, 직접 raw 기록, 편집 로고의 source 재인코딩 | 출력 생성 |
 | `build-rom` | 476개 글리프와 ROM 오프셋 | 출력 생성 |
-| `verify` | 결과 구조·크기·해시·재파싱 | 없음 |
+| `verify` | 원본 입력과 현재 소스로 재빌드한 결과의 해시·구조 대조 | 없음 |
 | `compare` | 기준 파일과 결과의 차이 | 없음 |
 
 불일치가 나오면 소스 행과 분석 근거를 다시 검토합니다.
+
+원본 입력을 직접 지정한 경우 `verify`의 `--original-d88`, `--original-rom`에 같은 입력을 지정합니다. 기본값은 `import/`입니다.

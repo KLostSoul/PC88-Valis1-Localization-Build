@@ -19,10 +19,10 @@
 ## 명령
 
 ```text
-PYTHONPATH=. python -m tools.valis_rebuild source-lint
-PYTHONPATH=. python -m tools.valis_rebuild text-lint
-PYTHONPATH=. python -m tools.valis_rebuild build --d88 import --rom import
-PYTHONPATH=. python -m tools.valis_rebuild verify --d88 output --rom output
+python -m tools.valis_rebuild source-lint
+python -m tools.valis_rebuild text-lint
+python -m tools.valis_rebuild build --d88 import --rom import
+python -m tools.valis_rebuild verify --d88 output --rom output
 ```
 
 비교 명령으로 결과를 기준 파일과 대조합니다.

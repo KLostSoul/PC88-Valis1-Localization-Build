@@ -14,5 +14,5 @@
     {"bytes": "10 12", "category": "space_or_source_pair", "scope": "context-specific; not padding"}
   ],
   "consumer": {"pc": "0x02ED", "operation": "LD E,(HL); INC HL"},
-  "review": {"status": "confirmed", "source": "Valis1_PC88_Localization_Skills_IPS_Only_2026-08-09/skills/patch-valis1-pc88-ko/references/event-text.md"}
+  "review": {"status": "confirmed", "source": "source/asm/source/event-consumer.asm"}
 }

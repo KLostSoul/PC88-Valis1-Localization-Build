@@ -1,22 +1,12 @@
 {
-  "body_range": "0x9680~0xA4F4",
-  "body_length_bytes": 3701,
-  "terminator_expected": "0xA4F5=0F",
-  "stats": {
-    "data_rows": 1653,
-    "character_rows": 1471,
-    "control_rows": 182,
-    "orange_hangul_speech_rows": 702,
-    "green_hangul_general_rows": 278,
-    "punctuation_or_space_rows": 491,
-    "left_quote_88_22_rows": 10,
-    "right_quote_98_22_rows": 10,
-    "final_character_slots": 1471
-  },
+  "schema": "valis-event-text-validation/v1",
+  "source_table": "source/text/event-block-2-korean.jsonl",
+  "audit_table": "source/tables/events/block-2-audit.csv",
+  "rows": 1653,
+  "token_bytes": 3701,
   "verification": {
-    "bad_rule_count": 0,
-    "unknown_count": 0,
-    "left_quote_value": "88 22",
-    "right_quote_value": "98 22"
+    "row_numbers_contiguous": true,
+    "token_lengths_match_ranges": true,
+    "tokens_match_audit_and_raw_tables": true
   }
 }

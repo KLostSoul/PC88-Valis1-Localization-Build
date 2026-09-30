@@ -2,6 +2,8 @@
   "schema": "valis-gameover-hold-patch/v1",
   "component": "gameover_hold_34_35",
   "runtime_address": "0x0153",
+  "runtime_base": "0x0100",
+  "decode_correction": "3A",
   "runtime_old": "42",
   "runtime_new": "30",
   "d88_sector": {"c": "06", "h": "40", "r": "01", "n": "03"},
@@ -9,7 +11,7 @@
   "raw_old": "5C",
   "raw_new": "4A",
   "source": {
-    "document": "docs/evidence-and-source-map.md#gameover",
+    "document": "docs/evidence-and-source-map.md#게임오버",
     "observation": "The build verifies the declared sector and original byte before applying this one-byte change."
   },
   "review": "confirmed"

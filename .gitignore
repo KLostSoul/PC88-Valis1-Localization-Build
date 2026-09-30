@@ -1,14 +1,11 @@
 # Copyrighted/user-supplied inputs and local-only analysis material.
-*.d88
-*.D88
-*.rom
-*.ROM
-*.ips
-*.IPS
-*.zip
-*.ZIP
+*.[dD]88
+*.[rR][oO][mM]
+*.[iI][pP][sS]
+*.[zZ][iI][pP]
 upload/
 import/
+결과/
 reference_work_*/
 nested_extract_*/
 analysis/local_only/
@@ -20,7 +17,7 @@ source/reference/
 build/*
 !build/.gitkeep
 output/*
-*.bin
+*.[bB][iI][nN]
 *.log
 __pycache__/
 .pytest_cache/

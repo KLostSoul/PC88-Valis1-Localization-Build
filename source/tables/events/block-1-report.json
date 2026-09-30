@@ -1,63 +1,13 @@
 {
-  "purpose": "Block 1 patch: orange Hangul rows only use speech-enabled tokens; non-orange Hangul rows use general non-speech tokens.",
-  "runtime_range": "0x9680~0x9C99",
-  "decoded_stream_bytes_written": 1562,
-  "segments": [
-    {
-      "runtime": "0x9680~0x9A7F",
-      "payload": "0x1A2A0~0x1A69F",
-      "key": "0x2B"
-    },
-    {
-      "runtime": "0x9A80~0x9E7F",
-      "payload": "0x1A6B0~0x1AAAF",
-      "key": "0x2A"
-    }
-  ],
-  "rule": {
-    "orange_hangul": "document bytes unchanged; speech condition kept",
-    "non_orange_hangul": "first byte OR 08h; same glyph base, speech disabled",
-    "row_210": "ignored as speech target; kept as 18 12 full-width space",
-    "space": "18 12",
-    "punctuation_control": "document bytes unchanged",
-    "five_byte_speech": "not used"
-  },
-  "row_counts": {
-    "data_rows": 678,
-    "character_rows": 540,
-    "control_rows": 138,
-    "orange_rows": 213,
-    "orange_hangul_speech_rows": 213,
-    "non_orange_hangul_general_rows": 124,
-    "space_rows_total": 96,
-    "space_rows_1812": 96,
-    "row_210": {
-      "row": "210",
-      "kind": "문자",
-      "addr": "0x9868~0x9869",
-      "slot": "162",
-      "char": "␠",
-      "doc_bytes": "18 12",
-      "final_bytes": "18 12",
-      "fill": "eff6e7"
-    }
-  },
+  "schema": "valis-event-source-validation/v1",
+  "source_table": "source/tables/events/block-1-raw-changes.csv",
+  "logical_rows": 659,
+  "raw_byte_writes": 1449,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decoded_after_matches_target_stream": true,
-    "mismatch_count": 0,
-    "orange_hangul_speech_condition_ok": 213,
-    "non_orange_hangul_speech_disabled_ok": 124,
-    "outside_payload_change_count": 0,
-    "only_payload_0x1A2A0_0x1A6B0_changed": true
-  },
-  "disk_changes": {
-    "changed_byte_count": 1449,
-    "changed_records_count": 1449,
-    "min_changed_offset": "0x1A2A0",
-    "max_changed_offset": "0x1AAAF"
-  },
-  "file_size_original": 414992,
-  "file_size_output": 414992,
-  "sha256_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-  "sha256_output": "33c03798695e8bd1fbe01d3d23354494efacdaf4dd0b3d48f0196beb9a333bba"
+    "unique_disk_offsets": true,
+    "raw_old_matches_input": true,
+    "decoded_bytes_match_raw": true,
+    "writes_inside_payload": true
+  }
 }

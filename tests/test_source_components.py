@@ -7,11 +7,12 @@ import unittest
 from tools.valis_rebuild.kanji import build_rom, load_assignments
 from tools.valis_rebuild.pipeline import build_disk, build_kanji
 from tools.valis_rebuild.text_sources import lint_text_sources
+from tests.media_inputs import original_media
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL_ROM = ROOT.parent / "upload" / "KANJI1(5).ROM"
-ORIGINAL_D88 = ROOT.parent / "upload" / "Mugen Senshi Valis (1986)(Nihon Telenet)(Disk 1 of 2)(1).d88"
+ORIGINAL_ROM = original_media("rom")
+ORIGINAL_D88 = original_media("d88")
 
 
 class SourceComponentTests(unittest.TestCase):
@@ -76,18 +77,19 @@ class SourceComponentTests(unittest.TestCase):
     def test_integrated_build_from_original_media(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
-            disk = build_disk(ROOT, ORIGINAL_D88, output / "d88")
-            kanji = build_kanji(ROOT, ORIGINAL_ROM, output / "kanji")
+            disk = build_disk(ROOT, ORIGINAL_D88, output)
+            kanji = build_kanji(ROOT, ORIGINAL_ROM, output)
             self.assertEqual(disk["structure"], {"sectors": 422, "flat_payload": 407552})
             self.assertTrue(disk["exact_release_match"])
             self.assertEqual(
                 disk["output"]["sha256"],
                 "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8",
             )
-            self.assertEqual(disk["output"]["path"], str(output / "d88" / "valis_disk_a(K).d88"))
+            self.assertEqual(disk["output"]["path"], str(output / "valis_disk_a(K).d88"))
             self.assertTrue(kanji["exact_release_match"])
             self.assertEqual(kanji["output"]["sha256"], "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a")
-            self.assertEqual(kanji["output"]["path"], str(output / "kanji" / "KANJI1(K).ROM"))
+            self.assertEqual(kanji["output"]["path"], str(output / "KANJI1(K).ROM"))
+            self.assertEqual(len(list(output.iterdir())), 2)
 
 
 if __name__ == "__main__":

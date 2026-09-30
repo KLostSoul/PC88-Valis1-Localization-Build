@@ -1,51 +1,13 @@
 {
-  "purpose": "Block 5 Korean patch after row add/delete recalculation from 0001-1381 document.",
-  "runtime_range_written": "0x9680~0xA24E",
-  "body_runtime_range": "0x9680~0xA24D",
-  "terminator": "0xA24E=0F",
-  "decoded_bytes_written": 3023,
-  "document_validation": {
-    "data_rows": 1381,
-    "character_rows": 1162,
-    "control_rows": 219,
-    "orange_hangul_speech_rows": 487,
-    "green_hangul_general_rows": 205,
-    "punctuation_or_space_rows": 465,
-    "red_manual_rows_preserved_and_applied": 5,
-    "bad_doc_rule_count": 0
-  },
-  "payload_map": [
-    {
-      "runtime": "0x9680~0x9A7F",
-      "payload": "0x1CB40~0x1CF3F",
-      "key": "0x29"
-    },
-    {
-      "runtime": "0x9A80~0x9E7F",
-      "payload": "0x1CF50~0x1D34F",
-      "key": "0x28"
-    },
-    {
-      "runtime": "0x9E80~0xA27F",
-      "payload": "0x1D360~0x1D75F",
-      "key": "0x28"
-    }
-  ],
-  "changes": {
-    "changed_byte_count": 2848,
-    "changed_records_count": 2848,
-    "min_changed_offset": "0x1CB41",
-    "max_changed_offset": "0x1D75F",
-    "outside_payload_change_count": 0
-  },
+  "schema": "valis-event-source-validation/v1",
+  "source_table": "source/tables/events/block-5-raw-changes.csv",
+  "logical_rows": 1364,
+  "raw_byte_writes": 2848,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decoded_after_matches_document_stream": true,
-    "mismatch_count": 0,
-    "only_declared_payload_segments_changed": true,
-    "file_size_unchanged": true
-  },
-  "file_size_original": 414992,
-  "file_size_output": 414992,
-  "sha256_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-  "sha256_output": "7dd1f86168f681230e668ba5e93ea3d4d0b49239273977b92b608fe1faab8a9d"
+    "unique_disk_offsets": true,
+    "raw_old_matches_input": true,
+    "decoded_bytes_match_raw": true,
+    "writes_inside_payload": true
+  }
 }

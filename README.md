@@ -35,54 +35,45 @@
 
 저장소 루트에서 실행합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild source-lint
-PYTHONPATH=. python -m tools.valis_rebuild text-lint
-PYTHONPATH=. python -m unittest discover -s tests -v
+```console
+python -m tools.valis_rebuild source-lint
+python -m tools.valis_rebuild text-lint
+python -m unittest discover -s tests -v
 ```
 
 입력은 레이아웃에 기록된 크기와 SHA-256으로 검증합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild build \
-  --d88 import \
-  --rom import
+```console
+python -m tools.valis_rebuild build --d88 import --rom import
 ```
 
 로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽습니다. 픽셀 변경이 있는 그룹만 재인코딩합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
 
 원본 KANJI1 ROM이 들어 있는 `import/` 폴더를 지정해 글리프 ROM만 만들 수도 있습니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild build-rom \
-  --rom import
+```console
+python -m tools.valis_rebuild build-rom --rom import
 ```
 
 KANJI1 ROM에 476개 글리프를 적용합니다.
 
 출력을 검증합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 output \
-  --rom output
+```console
+python -m tools.valis_rebuild verify --d88 output --rom output
 ```
 
 결과를 기준 파일과 대조합니다.
 
-```sh
-PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built output \
-  --reference 결과 \
-  --fail-on-diff
+```console
+python -m tools.valis_rebuild compare --built output --reference 결과 --fail-on-diff
 ```
 
-## 결과물과 보관 범위
-
-원본 D88·KANJI1 ROM은 로컬 `import/` 또는 사용자가 지정한 위치에서 읽고, 생성된 D88·ROM은 `output/`에 둡니다. 매체 이미지와 빌드 산출물은 Git에 추가하거나 푸시하지 않습니다. 저장소에 포함되는 그래픽 파일은 `source/GFX/`의 편집용 로고 PNG입니다.
+결과 D88과 KANJI1 ROM은 `output/`에 생성됩니다.
 
 ## 문서
 
+- [빌드 전수 검수](docs/build-audit.md)
 - [직접 바이너리 재현 빌드 안내서](docs/direct-binary-build.md)
 - [분석 근거와 빌드 소스 대응표](docs/evidence-and-source-map.md)
 - [재현 빌드 검증 절차](docs/reproducibility.md)

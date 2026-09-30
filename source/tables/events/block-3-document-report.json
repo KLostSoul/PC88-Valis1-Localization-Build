@@ -1,24 +1,12 @@
 {
-  "body_range": "0x9680~0x9E6F",
-  "body_length_bytes": 2032,
-  "terminator_expected": "0x9E70=0F",
-  "stats": {
-    "data_rows": 984,
-    "character_rows": 886,
-    "control_rows": 98,
-    "orange_hangul_speech_rows": 128,
-    "green_hangul_general_rows": 476,
-    "punctuation_or_space_rows": 282,
-    "left_quote_88_22_rows": 0,
-    "right_quote_98_22_rows": 0,
-    "blank_original_seq_live_rows": 0,
-    "deleted_or_blank_rows_ignored": 0,
-    "final_character_slots": 886
-  },
+  "schema": "valis-event-text-validation/v1",
+  "source_table": "source/text/event-block-3-korean.jsonl",
+  "audit_table": "source/tables/events/block-3-audit.csv",
+  "rows": 984,
+  "token_bytes": 2032,
   "verification": {
-    "bad_rule_count": 0,
-    "bad_rule_rows": [],
-    "unknown_count": 0,
-    "unknown_rows": []
+    "row_numbers_contiguous": true,
+    "token_lengths_match_ranges": true,
+    "tokens_match_audit_and_raw_tables": true
   }
 }

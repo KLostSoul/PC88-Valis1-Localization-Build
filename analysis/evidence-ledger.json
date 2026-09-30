@@ -19,117 +19,235 @@
     "status",
     "review"
   ],
-  "allowed_status": ["observed", "derived", "confirmed", "conflict", "blocked"],
+  "allowed_status": [
+    "observed",
+    "derived",
+    "confirmed",
+    "conflict",
+    "blocked"
+  ],
   "facts": [
     {
       "id": "D88-ORIGINAL-GEOMETRY",
       "component": "original_d88_layout",
       "assertion": "User-supplied Disk A is a 414992-byte D88 with 422 sectors and 407552 flat payload bytes.",
-      "source_documents": ["Valis1_PC88_Localization_Skills_IPS_Only_2026-08-09/skills/reproduce-valis1-pc88-ko/SKILL.md"],
-      "source_location": "Disk A structure and verified input hash sections",
+      "source_documents": [
+        "source/media/d88-layout.json"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "sha256=7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf; header=0x2B0; sectors=422; payload=407552",
       "address_layer": "d88_container",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "KANJI-476-TXT",
       "component": "kanji_glyph_assignments",
       "assertion": "The accepted KANJI source contains 476 explicit 16x16 1bpp TXT glyphs with explicit token, slot and ROM offset fields.",
-      "source_documents": ["Valis_KANJI1_16x16_EDITKIT_476_SIMPLIFIED_UNDO_REDO_BATCHFIX_2026-08-04/README_SIMPLIFIED_KO.txt"],
-      "source_location": "glyphs_edit_16x16_txt_visual and edit-kit README",
+      "source_documents": [
+        "source/media/kanji1-layout.json",
+        "source/tables/kanji/assignments.csv"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "476 files; each source has 16 rows of 16 cells; slot*0x20 equals the filename ROM offset; using the recorded original KANJI1 SHA-256 7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb generates KANJI1(K).ROM SHA-256 6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a",
       "address_layer": "rom_offset",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "EVENTS-RAW-OLD-GUARDS",
       "component": "event_block_1_to_6",
       "assertion": "Final event raw tables are explicit D88 file offsets and all raw_old bytes agree with the user original.",
-      "source_documents": ["Valis_Block1..6 final report JSON/CSV tables inside Valis 1(1).zip"],
-      "source_location": "source/tables/events/block-*-raw-changes.csv",
-      "literal_observation": "block write rows = 1449, 3536, 1934, 1701, 2848, 817; each table old-value audit had zero mismatches against original D88",
+      "source_documents": [
+        "source/tables/events/block-1-raw-changes.csv",
+        "source/tables/events/block-2-raw-changes.csv",
+        "source/tables/events/block-3-raw-changes.csv",
+        "source/tables/events/block-4-raw-changes.csv",
+        "source/tables/events/block-5-raw-changes.csv",
+        "source/tables/events/block-6-raw-changes.csv"
+      ],
+      "source_location": "Repository source records",
+      "literal_observation": "block byte writes = 1449, 3536, 1934, 1701, 2848, 817; each table old-value audit had zero mismatches against original D88",
       "address_layer": "d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "GAMEOVER-STRUCTURE",
       "component": "gameover_fixed_1_15_and_scroll_1_35",
       "assertion": "Gameover fixed segments and scroll blocks are independent literal text/token/address tables.",
-      "source_documents": ["Gameover/Valis_gameover_staffroll_original_SCROLL1-35_BLOCK12_AFTER35_BLOCK12_TOKENPAIRS_UPDATED_2026-06-24.docx"],
-      "source_location": "tables 2 and 3",
+      "source_documents": [
+        "source/text/gameover-fixed.jsonl",
+        "source/text/gameover-scroll.jsonl"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "fixed numbers 1..15; scroll blocks 1..35; scroll MAIN 0x0D73..0x12EF and SUB 0x4C73..0x51EF; five marker records are explicitly listed",
       "address_layer": "runtime_sub_and_d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "ENDING-24-SEGMENTS",
       "component": "ending_1_24",
       "assertion": "Ending source is 24 independently delimited segments with 24 literal 0F terminators and 3622 bytes through the final terminator.",
-      "source_documents": ["Valis_DiskA_ORIGINAL_ending_FULL24_BASECODE_471_8022_9022_v5_2026-05-29_report.json", "..._layout.csv", "..._text_basecode_tokens.csv"],
-      "source_location": "source/tables/ending",
+      "source_documents": [
+        "source/tables/ending/layout.csv",
+        "source/tables/ending/text-basecode-tokens.csv",
+        "source/tables/ending/raw-changes.csv"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "capacity=3700; stream_through_24th_0F=3622; untouched tail=78; raw changes=2398; quote pairs are 80 22 and 90 22",
       "address_layer": "runtime_sub_and_d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "ERROR07-FINAL-TABLE",
       "component": "error07",
       "assertion": "ERROR 07 final command stream is 83 used bytes followed by an 11-byte cleared tail, with three explicit dynamic destination operand writes.",
-      "source_documents": ["Valis_1_ERROR_MESSAGE_translation_patch_table_2026-07-21_FINAL_PATCH_RECORDED.docx"],
-      "source_location": "tables 0, 3 and 6",
+      "source_documents": [
+        "source/tables/error07/raw-changes.csv",
+        "source/asm/source/error07-command-stream.asm"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "source raw table contains 97 writes; old guards come from original D88; changed-byte count after comparison is 73; runtime command range is 0xBE8A..0xBEDC",
       "address_layer": "runtime_main_and_d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "LOGO-RAW-MAP",
       "component": "title_logo",
       "assertion": "The logo source map declares editable PNGs, groups, planes, RAM source ranges, dimensions, encoders, and baseline pixel hashes; separate maps retain decoder and D88 raw-address evidence.",
-      "source_documents": ["Logo/Valis_opening_logo_CG_analysis_2026-07-03_UPDATED_VALIS_LOGO_SUCCESS_FINAL.docx", "Logo/valis_title_cg_original_user_editing_kit_png_stdlib_2026-07-03.zip/build_user_edit/changed_bytes.csv"],
-      "source_location": "source/tables/logo",
-      "literal_observation": "The external editing-kit report records 7,595 changed raw bytes; the accepted runtime raw-changes table has 7,521 rows. The mapped target ranges are 0x2800..0x4166, 0x4167..0x4404 and 0x4405..0x47E2; decoders are 05CE and 061F.",
+      "source_documents": [
+        "source/tables/logo/source-map.csv",
+        "source/tables/logo/ram-to-raw-map.csv",
+        "source/tables/logo/raw-changes.csv",
+        "source/tables/logo/report.json"
+      ],
+      "source_location": "Repository source records",
+      "literal_observation": "6 editable PNGs; 3 source groups; 7521 baseline raw writes; mapped ranges 0x2800..0x4166, 0x4167..0x4404, 0x4405..0x47E2; encoders 05CE and 061F.",
       "address_layer": "runtime_main_and_d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "TOKEN-CONSUMER",
       "component": "control_tokens",
-      "assertion": "The event consumer begins at PC 0x02ED with LD E,(HL); INC HL and byte cursor is distinct from screen cursor.",
-      "source_documents": ["Valis1_PC88_Localization_Skills_IPS_Only_2026-08-09/skills/patch-valis1-pc88-ko/references/event-text.md"],
-      "source_location": "consumer model",
+      "assertion": "The stored ASM observation records PC 0x02ED with LD E,(HL); INC HL and distinguishes the byte cursor from the screen cursor.",
+      "source_documents": [
+        "source/asm/source/event-consumer.asm",
+        "source/tables/tokens/control-token-registry.json"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "PC=0x02ED; operation bytes are 5E 23; 0F/15 00/17 00/1A 00 xx/19 00 xx are only accepted in declared contexts",
       "address_layer": "runtime_main",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "TEXT-ORIGINAL-KOREAN-SOURCES",
       "component": "text_sources",
       "assertion": "Original/Japanese text, Korean translation text, Korean row-level verification tables, gameover tables, and ending 24-segment text are separate literal source files.",
-      "source_documents": ["Block 1~6 translation/verification tables", "Ednding/Valis_ending_24_segments_japanese_text_for_translation_ORIGINAL_COLUMN_FILLED_FINAL.docx", "Gameover staffroll source tables inside Valis 1(1).zip"],
-      "source_location": "source/text/*.jsonl and source-index.json",
+      "source_documents": [
+        "source/text/source-index.json"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "text-lint verifies fixed counts: event original/translation 170/36/23/19/39/10, Korean verification 1653/984/811/1381/411, ending 24, gameover fixed 15 and scroll 35; every row keeps provenance.",
       "address_layer": "source_text_and_runtime_verification",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "evidence-ledger review pass", "date": "2026-08-24"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     },
     {
       "id": "REL-102-COMPONENT-CLOSURE",
       "component": "integrated_release",
       "assertion": "The final v1.02 bytes have been incorporated into their owning component tables, so the component build itself closes the release state.",
-      "source_documents": ["Valis1_PC88_Localization_Skills_IPS_Only_2026-08-09/skills/reproduce-valis1-pc88-ko/references/verified-artifacts.md", "Valis_30개_통합_분석문서.docx"],
-      "source_location": "Disk A v1.02 closed-release verification; final component patch-table updates",
+      "source_documents": [
+        "source/release-baseline.json"
+      ],
+      "source_location": "Repository source records",
       "literal_observation": "Final corrections are now owned by source tables: 24 game-over scroll token rows, 7,521 logo raw-byte rows, 11 event raw-byte rows, and 11 ERROR 07 raw-byte rows. Building only those component tables yields SHA-256 18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8.",
       "address_layer": "integrated_d88_file_data",
       "status": "confirmed",
-      "review": {"status": "confirmed", "reviewer": "v1.02 component-source review", "date": "2026-08-25"}
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
+    },
+    {
+      "id": "GAMEOVER-HOLD",
+      "component": "gameover_hold_34_35",
+      "assertion": "One D88 byte at 0x079AC changes from 5C to 4A after a sector and original-byte guard.",
+      "source_documents": [
+        "source/tables/gameover/hold-34-35.json",
+        "tools/valis_rebuild/serializer.py"
+      ],
+      "source_location": "apply_hold_patch",
+      "literal_observation": "CHRN=06/40/01/03; disk_offset=0x079AC; raw_old=5C; raw_new=4A",
+      "address_layer": "d88_file_data",
+      "status": "confirmed",
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
+    },
+    {
+      "id": "DEBUG-OBSERVATIONS",
+      "component": "debug_observations",
+      "assertion": "Stored symbols and ASM observations describe the event, ERROR 07, and logo routines.",
+      "source_documents": [
+        "source/asm/symbols.json",
+        "source/asm/source/event-consumer.asm",
+        "source/asm/source/error07-command-stream.asm",
+        "source/asm/source/logo-routine-observation.asm"
+      ],
+      "source_location": "Stored symbols and instruction rows",
+      "literal_observation": "Reference records; the build applies the byte tables instead of assembling these files.",
+      "address_layer": "runtime_main",
+      "status": "confirmed",
+      "review": {
+        "status": "confirmed",
+        "reviewer": "repository source verification",
+        "date": "2026-10-01"
+      }
     }
   ]
 }

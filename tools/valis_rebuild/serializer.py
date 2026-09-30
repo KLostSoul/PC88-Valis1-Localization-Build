@@ -15,6 +15,7 @@ from pathlib import Path
 
 from .d88 import D88Image
 from .errors import BuildError
+from .codec import decode_byte
 
 
 @dataclass(frozen=True)
@@ -29,7 +30,7 @@ class RawWrite:
 def _byte(value: str, field: str, row: int) -> int:
     try:
         result = int(value, 16)
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise BuildError(f"invalid {field} at CSV row {row}: {value!r}") from exc
     if not 0 <= result <= 0xFF:
         raise BuildError(f"{field} is not one byte at CSV row {row}: {value!r}")
@@ -55,6 +56,8 @@ def load_raw_writes(
         else:
             raise BuildError(f"{path} is missing explicit raw write columns")
         for row_number, row in enumerate(reader, 2):
+            if None in row or any(row.get(field) is None for field in fields):
+                raise BuildError(f"incorrect CSV field count at {path}:{row_number}")
             if skip_ram_ranges:
                 try:
                     ram_address = int(row["ram_addr"], 16)
@@ -67,6 +70,26 @@ def load_raw_writes(
             new_values = row[new_field].split()
             if not offsets or len(offsets) != len(old_values) or len(offsets) != len(new_values):
                 raise BuildError(f"mismatched raw write arrays at CSV row {row_number}")
+            if "disk_offsets" in fields:
+                for field in ("runtime_addrs", "byte_indices", "decoded_old_bytes", "decoded_new_bytes",
+                              "payload_starts", "decode_keys", "segment_indices"):
+                    if field not in row or len(row[field].split()) != len(offsets):
+                        raise BuildError(f"mismatched {field} at {path}:{row_number}")
+                if "doc_decoded_bytes" in fields and len(row["doc_decoded_bytes"].split()) != len(offsets):
+                    raise BuildError(f"mismatched doc_decoded_bytes at {path}:{row_number}")
+                for offset, base, index, key, old, new, decoded_old, decoded_new in zip(
+                    offsets, row["payload_starts"].split(), row["segment_indices"].split(),
+                    row["decode_keys"].split(), old_values, new_values,
+                    row["decoded_old_bytes"].split(), row["decoded_new_bytes"].split(),
+                ):
+                    local, correction = int(index, 16), int(key, 16) + 1
+                    if not 0 <= local < 0x400 or int(offset, 16) != int(base, 16) + 0x3FF - local:
+                        raise BuildError(f"event address mapping mismatch at {path}:{row_number}")
+                    # Tables store key=Ccorr-1; the loader's DE is local+1.
+                    if decode_byte(_byte(old, "raw_old", row_number), local, correction) != _byte(decoded_old, "decoded_old", row_number):
+                        raise BuildError(f"decoded old byte disagrees with raw byte at {path}:{row_number}")
+                    if decode_byte(_byte(new, "raw_new", row_number), local, correction) != _byte(decoded_new, "decoded_new", row_number):
+                        raise BuildError(f"decoded new byte disagrees with raw byte at {path}:{row_number}")
             for offset_value, old_value, new_value in zip(offsets, old_values, new_values):
                 try:
                     offset = int(offset_value, 16)
@@ -115,7 +138,7 @@ def apply_raw_tables(
                 f"table={write.raw_old:02X} input={actual:02X}"
             )
         offsets[write.disk_offset] = write
-        image.data[write.disk_offset] = write.raw_new
+        image.write_data(write.disk_offset, bytes([write.raw_new]), expected_old=bytes([write.raw_old]))
         report = reports.setdefault(write.component, {"component": write.component, "writes": 0, "changed": 0})
         report["writes"] += 1
         report["changed"] += int(write.raw_old != write.raw_new)
@@ -131,9 +154,17 @@ def apply_hold_patch(image: D88Image, path: str | Path) -> dict:
         raise BuildError("hold source offset is outside its declared CHRN sector")
     old = _byte(record["raw_old"], "raw_old", 0)
     new = _byte(record["raw_new"], "raw_new", 0)
+    local = int(record["runtime_address"], 16) - int(record["runtime_base"], 16)
+    correction = _byte(record["decode_correction"], "decode_correction", 0)
+    if not 0 <= local < expected_sector.length or offset != expected_sector.end - 1 - local:
+        raise BuildError("hold runtime address does not match its D88 offset")
+    if correction != 0x40 - expected_sector.c:
+        raise BuildError("hold decode correction does not match its declared sector")
+    if decode_byte(old, local, correction) != _byte(record["runtime_old"], "runtime_old", 0) or decode_byte(new, local, correction) != _byte(record["runtime_new"], "runtime_new", 0):
+        raise BuildError("hold runtime bytes disagree with the raw bytes")
     actual = image.data[offset]
     if actual != old:
         raise BuildError(f"hold raw_old mismatch at 0x{offset:X}: table={old:02X} input={actual:02X}")
-    image.data[offset] = new
+    image.write_data(offset, bytes([new]), expected_old=bytes([old]))
     return {"component": record["component"], "writes": 1, "changed": int(old != new)}
 

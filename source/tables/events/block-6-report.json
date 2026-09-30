@@ -1,38 +1,13 @@
 {
-  "purpose": "Block 6 Korean patch after row add/delete recalculation from 0001-0411 document.",
-  "runtime_range_written": "0x9680~0x99EA",
-  "body_runtime_range": "0x9680~0x99E9",
-  "terminator": "0x99EA=0F",
-  "decoded_bytes_written": 875,
-  "document_validation": {
-    "data_rows": 411,
-    "character_rows": 351,
-    "control_rows": 60,
-    "orange_hangul_speech_rows": 73,
-    "green_hangul_general_rows": 163,
-    "punctuation_or_space_rows": 115,
-    "bad_doc_rule_count": 0
-  },
-  "payload_map": {
-    "runtime": "0x9680~0x9A7F",
-    "payload": "0x1D770~0x1DB6F",
-    "key": "0x28"
-  },
-  "changes": {
-    "changed_byte_count": 817,
-    "changed_records_count": 817,
-    "min_changed_offset": "0x1D805",
-    "max_changed_offset": "0x1DB54",
-    "outside_payload_change_count": 0
-  },
+  "schema": "valis-event-source-validation/v1",
+  "source_table": "source/tables/events/block-6-raw-changes.csv",
+  "logical_rows": 404,
+  "raw_byte_writes": 817,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decoded_after_matches_document_stream": true,
-    "mismatch_count": 0,
-    "only_declared_payload_segment_changed": true,
-    "file_size_unchanged": true
-  },
-  "file_size_original": 414992,
-  "file_size_output": 414992,
-  "sha256_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-  "sha256_output": "a63f350237e7a969234d0f3cfbfd42f077ee557bd78e549e973676beb529c108"
+    "unique_disk_offsets": true,
+    "raw_old_matches_input": true,
+    "decoded_bytes_match_raw": true,
+    "writes_inside_payload": true
+  }
 }

@@ -58,6 +58,8 @@ def correction_for(segments: list[CorrectionSegment], address: int) -> int:
 
 def encode_event(decoded: bytes, *, runtime_base: int, capacity: int,
                  corrections: list[CorrectionSegment]) -> bytes:
+    if capacity < 0 or capacity % 0x400:
+        raise BuildError("event capacity must be a multiple of 0x400")
     if len(decoded) > capacity:
         raise BuildError(f"decoded stream length {len(decoded)} exceeds capacity {capacity}")
     padded = decoded + bytes(capacity - len(decoded))
@@ -114,7 +116,7 @@ def make_reverse_plan(decoded: bytes, *, sub_start: int,
         file_offset = data_bases[block] + 0x3FF - local
         encoded = encode_byte(value, local, correction)
         old = plan.get(file_offset)
-        if old is not None and old != encoded:
+        if old is not None:
             raise BuildError(f"conflicting duplicate raw offset 0x{file_offset:X}")
         plan[file_offset] = encoded
     return plan
@@ -123,5 +125,4 @@ def make_reverse_plan(decoded: bytes, *, sub_start: int,
 def apply_plan(image, plan: dict[int, int]) -> None:
     """Apply an explicit offset plan with no last-write-wins behavior."""
     for offset, value in sorted(plan.items()):
-        image.find_data_sector(offset)
-        image.data[offset] = value
+        image.write_data(offset, bytes([value]))

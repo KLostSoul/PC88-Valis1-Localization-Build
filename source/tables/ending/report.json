@@ -1,102 +1,17 @@
 {
-  "purpose": "Patch original Disk A ending 24 segments using latest v5 correction table and 471-character KANJI assignment.",
-  "encoding_policy": {
-    "hangul": "KANJI1 471 mapping KANJI코드/base_code low byte then high byte",
-    "quotes": {
-      "“": "80 22 / base_code 0x2280",
-      "”": "90 22 / base_code 0x2290"
-    },
-    "space": "10 12",
-    "segment_end": "0F",
-    "ascii_and_staffroll_symbols": "base_code pairs from original ending audit map where applicable",
-    "padding": "none; leave bytes after new 24th 0F untouched"
-  },
-  "payload_range": {
-    "SUB_total_allowed": "0x4B6A~0x59DD",
-    "MAIN_total_allowed": "0x0C6A~0x1ADD",
-    "total_capacity_bytes": 3700,
-    "patched_stream_length_through_new_24th_0F": 3622,
-    "untouched_tail_length_after_new_24th_0F": 78
-  },
-  "stats": {
-    "segments": 24,
-    "terminator_0F_count": 24,
-    "changed_byte_count": 2398,
-    "changed_record_count": 2398,
-    "outside_change_count": 0,
-    "tail_changed_count": 0,
-    "quote_row_count": 12,
-    "quote_check_ok": true,
-    "char_type_counts": {
-      "hangul_base_code": 540,
-      "punct_space_base_code": 1082,
-      "segment_end": 24,
-      "quote_basecode_clear_08h": 12,
-      "original_audit_base_code": 165
-    }
-  },
-  "extra_text_check": {
-    "expected_extra_text": "한글화 로솔・자외선",
-    "extra_syllable_basecodes": {
-      "로": [
-        [
-          "D0 31",
-          "0x31D0"
-        ]
-      ],
-      "솔": [
-        [
-          "40 E7",
-          "0xE740"
-        ]
-      ],
-      "자": [
-        [
-          "00 DF",
-          "0xDF00"
-        ]
-      ],
-      "외": [
-        [
-          "50 E7",
-          "0xE750"
-        ]
-      ],
-      "선": [
-        [
-          "70 3D",
-          "0x3D70"
-        ]
-      ],
-      "글": [
-        [
-          "60 E7",
-          "0xE760"
-        ]
-      ]
-    },
-    "new_471_syllable_used": {
-      "글": [
-        [
-          "60 E7",
-          "0xE760"
-        ]
-      ]
-    },
-    "all_translation_hangul_covered_by_471_assignment": true
-  },
+  "schema": "valis-ending-source-validation/v1",
+  "source_tables": [
+    "source/tables/ending/layout.csv",
+    "source/tables/ending/text-basecode-tokens.csv",
+    "source/tables/ending/raw-changes.csv"
+  ],
+  "segments": 24,
+  "stream_bytes": 3622,
+  "raw_byte_writes": 2398,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decode_mismatch_count": 0,
-    "all_changes_inside_ending_payload": true,
-    "tail_after_new_24th_0F_unchanged": true,
-    "file_size_unchanged": true,
-    "no_unsupported_characters": true,
-    "quote_all_8022_9022": true
-  },
-  "sha256": {
-    "source_docx": "25434bbefc5a10e44dae0ec0fe6988860be3fb1e9b874cdecd9d35bb437c9e25",
-    "base_d88_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-    "output_d88": "d4559eb1ec1d9511004e04095219b2240fd9818ffd8039acf75dc7608228484e",
-    "ips": "78bc282a5d3ba2d16b69a3db4bca136d54468e7d7c9b3e53cfb33277dc78a53c"
+    "segment_lengths_and_terminators_match": true,
+    "decoded_bytes_match_raw": true,
+    "raw_old_matches_input": true
   }
 }

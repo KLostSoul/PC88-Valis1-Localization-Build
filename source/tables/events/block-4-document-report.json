@@ -1,31 +1,12 @@
 {
-  "body_range": "0x9680~0x9D93",
-  "body_length_bytes": 1812,
-  "terminator_expected": "0x9D94=0F",
-  "remaining_bytes_against_original_0x9D8F": -4,
-  "stats": {
-    "data_rows": 811,
-    "character_rows": 684,
-    "control_rows": 127,
-    "orange_hangul_speech_rows": 405,
-    "green_hangul_general_rows": 35,
-    "punctuation_or_space_rows": 244,
-    "left_quote_88_22_rows": 0,
-    "right_quote_98_22_rows": 0,
-    "unchanged_nonhangul_nonpunct_rows": 0,
-    "deleted_or_blank_rows_ignored": 0,
-    "final_character_slots": 684
-  },
+  "schema": "valis-event-text-validation/v1",
+  "source_table": "source/text/event-block-4-korean.jsonl",
+  "audit_table": "source/tables/events/block-4-audit.csv",
+  "rows": 811,
+  "token_bytes": 1812,
   "verification": {
-    "bad_rule_count": 0,
-    "bad_rule_rows": [],
-    "unknown_count": 0,
-    "unknown_rows": [],
-    "orange_speech_rule": "orange Hangul rows keep speech-ready tokens: first_byte&08=0 and second_byte>=17h",
-    "green_general_rule": "green Hangul rows use first_byte|08h general tokens",
-    "punctuation_rule": "spaces and PC-88 punctuation use fixed punctuation tokens",
-    "left_quote_value": "88 22",
-    "right_quote_value": "98 22"
-  },
-  "sha256_output_docx": "0f57ce24a49f59cd7271a44d1874897396d5284b7c229bd0fadff1e8e866f514"
+    "row_numbers_contiguous": true,
+    "token_lengths_match_ranges": true,
+    "tokens_match_audit_and_raw_tables": true
+  }
 }

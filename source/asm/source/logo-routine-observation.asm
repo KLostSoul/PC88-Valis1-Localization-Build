@@ -1,4 +1,4 @@
-; Literal bytes observed at the verified 04A1 background/foreground scroll
+; Literal bytes recorded for the 04A1 background/foreground scroll
 ; entry. This is an inspection source, not an automatic hook installer.
         ORG 04A1h
         DB 0D3h, 05Ch, 0DDh, 026h, 048h, 021h, 000h, 0D4h

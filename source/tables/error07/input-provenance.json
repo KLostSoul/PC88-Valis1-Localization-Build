@@ -3,5 +3,11 @@
   "original_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "table6_tail_resolution": "0x3175 down through 0x316B from row 49 adjacency",
   "write_count": 97,
-  "reported_changed_byte_count": 73
+  "reported_changed_byte_count": 73,
+  "command_source": "source/asm/source/error07-command-stream.asm",
+  "command_payload_start": "0x30F0",
+  "command_raw_start": "0x31C8",
+  "decode_correction": "3E",
+  "command_length": 83,
+  "tail_length": 11
 }

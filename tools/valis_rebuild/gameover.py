@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from .codec import encode_byte
+from .codec import encode_byte, decode_byte
 from .d88 import D88Image
 from .errors import BuildError
 
@@ -28,7 +28,10 @@ CORRECTION = 0x3A
 def _range(text: str) -> tuple[int, int]:
     try:
         left, right = text.split("~", 1)
-        return int(left, 16), int(right, 16)
+        start, end = int(left, 16), int(right, 16)
+        if not 0 <= start <= end:
+            raise ValueError("invalid range bounds")
+        return start, end
     except ValueError as exc:
         raise BuildError(f"invalid gameover range: {text!r}") from exc
 
@@ -43,7 +46,10 @@ def _records(path: Path) -> list[dict]:
         if not line.strip():
             continue
         try:
-            records.append(json.loads(line))
+            record = json.loads(line)
+            if not isinstance(record, dict):
+                raise BuildError(f"gameover record must be an object: {path}:{line_number}")
+            records.append(record)
         except json.JSONDecodeError as exc:
             raise BuildError(f"invalid gameover JSONL at {path}:{line_number}") from exc
     if not records:
@@ -71,32 +77,64 @@ def _declared_raw_offsets(text: str) -> set[int]:
     return result
 
 
+def _record_plan(record: dict, component: str) -> tuple[bytes, int, list[int], int | None]:
+    pairs = record["token_pairs"]
+    if not isinstance(pairs, list) or not pairs or any(
+        not isinstance(pair, str) or len(pair) != 4 or
+        any(char not in "0123456789abcdefABCDEF" for char in pair) for pair in pairs
+    ):
+        raise BuildError(f"invalid gameover token pairs: {component} {record.get('number')}")
+    decoded = bytes.fromhex("".join(pairs))
+    sub_range_start, sub_range_end = _range(record["sub_range"])
+    main_start, main_end = _range(record["main_range"])
+    if (main_start + 0x3F00, main_end + 0x3F00) != (sub_range_start, sub_range_end):
+        raise BuildError(f"{component} MAIN/SUB range mismatch")
+    if "body_range" in record:
+        main_body_start, main_body_end = _range(record["body_range"])
+        sub_start, sub_end = main_body_start + 0x3F00, main_body_end + 0x3F00
+        if record.get("marker") not in {"", "0F"}:
+            raise BuildError(f"{component} has an unsupported marker")
+        if sub_end != sub_range_end or sub_start != sub_range_start + int(record.get("marker") == "0F"):
+            raise BuildError(f"{component} body/marker range mismatch")
+    else:
+        sub_start, sub_end = sub_range_start, sub_range_end
+        if int(record["terminator"], 16) + 0x3F00 != sub_end + 1:
+            raise BuildError(f"{component} terminator is not after its body")
+    if len(decoded) != sub_end - sub_start + 1:
+        raise BuildError(f"{component} {record.get('number')} token length/sub range mismatch")
+    expected_offsets = _expected_raw_offsets(sub_start, len(decoded))
+    marker_offset = _expected_raw_offsets(sub_range_start, 1)[0] if record.get("marker") == "0F" else None
+    all_expected_offsets = set(expected_offsets)
+    if marker_offset is not None:
+        all_expected_offsets.add(marker_offset)
+    if all_expected_offsets != _declared_raw_offsets(record["d88_range"]):
+        raise BuildError(f"{component} {record.get('number')} D88 span does not match explicit SUB map")
+    return decoded, sub_start, expected_offsets, marker_offset
+
+
+def lint_gameover_sources(source_root: str | Path) -> dict[str, list[int]]:
+    root = Path(source_root)
+    result = {}
+    for name, count in (("fixed", 15), ("scroll", 35)):
+        records = _records(root / f"text/gameover-{name}.jsonl")
+        if [r["number"] for r in records] != list(range(1, count + 1)):
+            raise BuildError(f"gameover {name} numbering is invalid")
+        offsets = []
+        for record in records:
+            _, _, declared, marker = _record_plan(record, f"gameover_{name}")
+            offsets.extend(declared)
+            if marker is not None:
+                offsets.append(marker)
+        result[name] = offsets
+    return result
+
+
 def _apply_records(image: D88Image, records: list[dict], component: str) -> dict:
     writes = 0
     changed = 0
     marker_relocations = 0
     for record in records:
-        pairs = record["token_pairs"]
-        decoded = bytes.fromhex("".join(pairs))
-        sub_range_start, sub_range_end = _range(record["sub_range"])
-        if "body_range" in record:
-            main_body_start, main_body_end = _range(record["body_range"])
-            sub_start = main_body_start + 0x3F00
-            sub_end = main_body_end + 0x3F00
-        else:
-            sub_start, sub_end = sub_range_start, sub_range_end
-        if len(decoded) != sub_end - sub_start + 1:
-            raise BuildError(f"{component} {record.get('number')} token length/sub range mismatch")
-        expected_offsets = _expected_raw_offsets(sub_start, len(decoded))
-        declared_offsets = _declared_raw_offsets(record["d88_range"])
-        all_expected_offsets = set(expected_offsets)
-        if "body_range" in record and record.get("marker") == "0F":
-            marker_offset = _expected_raw_offsets(sub_range_start, 1)[0]
-            all_expected_offsets.add(marker_offset)
-        if all_expected_offsets != declared_offsets:
-            raise BuildError(
-                f"{component} {record.get('number')} D88 span does not match explicit SUB map"
-            )
+        decoded, sub_start, expected_offsets, marker_offset = _record_plan(record, component)
         for index, value in enumerate(decoded):
             offset = expected_offsets[index]
             image.find_data_sector(offset)
@@ -104,17 +142,22 @@ def _apply_records(image: D88Image, records: list[dict], component: str) -> dict
             local = address - (address & ~0x3FF)
             raw_new = encode_byte(value, local, CORRECTION)
             actual = image.data[offset]
-            image.data[offset] = raw_new
+            image.write_data(offset, bytes([raw_new]))
             writes += 1
             changed += int(actual != raw_new)
-        if "body_range" in record and record.get("marker") == "0F":
-            marker_offset = _expected_raw_offsets(sub_range_start, 1)[0]
-            marker_raw = encode_byte(0x0F, sub_range_start - (sub_range_start & ~0x3FF), CORRECTION)
+        if marker_offset is not None:
+            marker_address = sub_start - 1
+            marker_raw = encode_byte(0x0F, marker_address & 0x3FF, CORRECTION)
             marker_old = image.data[marker_offset]
-            image.data[marker_offset] = marker_raw
+            image.write_data(marker_offset, bytes([marker_raw]))
             writes += 1
             changed += int(marker_old != marker_raw)
             marker_relocations += int(marker_old != marker_raw)
+        if "terminator" in record:
+            address = int(record["terminator"], 16) + 0x3F00
+            offset = _expected_raw_offsets(address, 1)[0]
+            if decode_byte(image.data[offset], address & 0x3FF, CORRECTION) != 0x0F:
+                raise BuildError(f"{component} fixed terminator is not 0F")
     return {"component": component, "records": len(records), "writes": writes,
             "changed": changed, "marker_relocations": marker_relocations}
 

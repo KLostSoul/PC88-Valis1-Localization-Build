@@ -1,98 +1,98 @@
-component,source_row,disk_offset,raw_old,raw_new,decoded_new,provenance
-error07,1,0x31C8,2E,2E,{41},ERROR 07 table 6 final token row
-error07,2,0x31C7,BE,BE,-,ERROR 07 table 6 final token row
-error07,2,0x31C6,12,12,-,ERROR 07 table 6 final token row
-error07,3,0x31C5,40,40,E,ERROR 07 table 6 final token row
-error07,3,0x31C4,17,17,E,ERROR 07 table 6 final token row
-error07,4,0x31C3,12,12,R,ERROR 07 table 6 final token row
-error07,4,0x31C2,1A,1A,R,ERROR 07 table 6 final token row
-error07,5,0x31C1,14,14,R,ERROR 07 table 6 final token row
-error07,5,0x31C0,1C,1C,R,ERROR 07 table 6 final token row
-error07,6,0x31BF,E6,E6,O,ERROR 07 table 6 final token row
-error07,6,0x31BE,1D,1D,O,ERROR 07 table 6 final token row
-error07,7,0x31BD,18,18,R,ERROR 07 table 6 final token row
-error07,7,0x31BC,20,20,R,ERROR 07 table 6 final token row
-error07,8,0x31BB,0B,0B,{11},ERROR 07 table 6 final token row
-error07,9,0x31BA,FB,FB,0,ERROR 07 table 6 final token row
-error07,9,0x31B9,13,13,0,ERROR 07 table 6 final token row
-error07,10,0x31B8,0D,0D,{#},ERROR 07 table 6 final token row
-error07,10,0x31B7,15,15,{#},ERROR 07 table 6 final token row
-error07,11,0x31B6,CF,CF,-,ERROR 07 table 6 final token row
-error07,11,0x31B5,23,23,-,ERROR 07 table 6 final token row
-error07,12,0x31B4,03,03,[02],ERROR 07 table 6 final token row
-error07,13,0x31B3,43,43,{41},ERROR 07 table 6 final token row
-error07,14,0x31B2,23,03,게,ERROR 07 table 6 final token row
-error07,14,0x31B1,1F,24,게,ERROR 07 table 6 final token row
-error07,15,0x31B0,C5,D5,임,ERROR 07 table 6 final token row
-error07,15,0x31AF,19,E4,임,ERROR 07 table 6 final token row
-error07,16,0x31AE,07,27,디,ERROR 07 table 6 final token row
-error07,16,0x31AD,42,38,디,ERROR 07 table 6 final token row
-error07,17,0x31AC,79,79,스,ERROR 07 table 6 final token row
-error07,17,0x31AB,34,49,스,ERROR 07 table 6 final token row
-error07,18,0x31AA,3B,8B,크,ERROR 07 table 6 final token row
-error07,18,0x31A9,26,F3,크,ERROR 07 table 6 final token row
-error07,19,0x31A8,9D,1E,{11},ERROR 07 table 6 final token row
-error07,20,0x31A7,29,1E,{#},ERROR 07 table 6 final token row
-error07,20,0x31A6,FF,26,{#},ERROR 07 table 6 final token row
-error07,21,0x31A5,2A,60,를,ERROR 07 table 6 final token row
-error07,21,0x31A4,21,45,를,ERROR 07 table 6 final token row
-error07,22,0x31A3,29,14,[02],ERROR 07 table 6 final token row
-error07,23,0x31A2,24,44,{31},ERROR 07 table 6 final token row
-error07,24,0x31A1,34,14,드,ERROR 07 table 6 final token row
-error07,24,0x31A0,4E,44,드,ERROR 07 table 6 final token row
-error07,25,0x319F,18,06,라,ERROR 07 table 6 final token row
-error07,25,0x319E,48,47,라,ERROR 07 table 6 final token row
-error07,26,0x319D,A8,A8,이,ERROR 07 table 6 final token row
-error07,26,0x319C,43,F7,이,ERROR 07 table 6 final token row
-error07,27,0x319B,AA,4A,브,ERROR 07 table 6 final token row
-error07,27,0x319A,55,01,브,ERROR 07 table 6 final token row
-error07,28,0x3199,5C,2D,{11},ERROR 07 table 6 final token row
-error07,29,0x3198,37,3D,{#},ERROR 07 table 6 final token row
-error07,29,0x3197,7E,35,{#},ERROR 07 table 6 final token row
-error07,30,0x3196,4A,5F,에,ERROR 07 table 6 final token row
-error07,30,0x3195,40,BF,에,ERROR 07 table 6 final token row
-error07,31,0x3194,38,32,{11},ERROR 07 table 6 final token row
-error07,32,0x3193,33,B2,넣,ERROR 07 table 6 final token row
-error07,32,0x3192,D3,0A,넣,ERROR 07 table 6 final token row
-error07,33,0x3191,4C,A4,고,ERROR 07 table 6 final token row
-error07,33,0x3190,36,45,고,ERROR 07 table 6 final token row
-error07,34,0x318F,06,28,[02],ERROR 07 table 6 final token row
-error07,35,0x318E,F4,48,{21},ERROR 07 table 6 final token row
-error07,36,0x318D,E8,98,리,ERROR 07 table 6 final token row
-error07,36,0x318C,61,5D,리,ERROR 07 table 6 final token row
-error07,37,0x318B,8A,CA,턴,ERROR 07 table 6 final token row
-error07,37,0x318A,53,12,턴,ERROR 07 table 6 final token row
-error07,38,0x3189,2E,3D,{11},ERROR 07 table 6 final token row
-error07,39,0x3188,4E,CD,키,ERROR 07 table 6 final token row
-error07,39,0x3187,CE,14,키,ERROR 07 table 6 final token row
-error07,40,0x3186,69,7F,를,ERROR 07 table 6 final token row
-error07,40,0x3185,20,64,를,ERROR 07 table 6 final token row
-error07,41,0x3184,4C,42,{11},ERROR 07 table 6 final token row
-error07,42,0x3183,02,E2,눌,ERROR 07 table 6 final token row
-error07,42,0x3182,46,1A,눌,ERROR 07 table 6 final token row
-error07,43,0x3181,64,74,러,ERROR 07 table 6 final token row
-error07,43,0x3180,70,66,러,ERROR 07 table 6 final token row
-error07,44,0x317F,06,47,{11},ERROR 07 table 6 final token row
-error07,45,0x317E,51,27,주,ERROR 07 table 6 final token row
-error07,45,0x317D,08,2D,주,ERROR 07 table 6 final token row
-error07,46,0x317C,4C,D9,세,ERROR 07 table 6 final token row
-error07,46,0x317B,5A,77,세,ERROR 07 table 6 final token row
-error07,47,0x317A,74,2B,요,ERROR 07 table 6 final token row
-error07,47,0x3179,4C,03,요,ERROR 07 table 6 final token row
-error07,48,0x3178,A1,6D,。,ERROR 07 table 6 final token row
-error07,48,0x3177,AE,50,。,ERROR 07 table 6 final token row
-error07,49,0x3176,58,41,[02],ERROR 07 table 6 final token row
-error07,50,0x3175,A0,40,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x3174,69,41,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x3173,02,42,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x3172,A8,43,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x3171,94,44,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x3170,5E,45,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x316F,86,46,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x316E,5F,47,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x316D,78,48,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x316C,5B,49,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07,50,0x316B,4C,4A,00,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
-error07_dynamic_destination,1,0x3341,2F,2C,2C,ERROR 07 table 3 dynamic destination operand
-error07_dynamic_destination,2,0x333B,26,23,23,ERROR 07 table 3 dynamic destination operand
-error07_dynamic_destination,3,0x3332,2F,2C,2C,ERROR 07 table 3 dynamic destination operand
+component,source_row,disk_offset,raw_old,raw_new,provenance
+error07,1,0x31C8,2E,2E,ERROR 07 table 6 final token row
+error07,2,0x31C7,BE,BE,ERROR 07 table 6 final token row
+error07,2,0x31C6,12,12,ERROR 07 table 6 final token row
+error07,3,0x31C5,40,40,ERROR 07 table 6 final token row
+error07,3,0x31C4,17,17,ERROR 07 table 6 final token row
+error07,4,0x31C3,12,12,ERROR 07 table 6 final token row
+error07,4,0x31C2,1A,1A,ERROR 07 table 6 final token row
+error07,5,0x31C1,14,14,ERROR 07 table 6 final token row
+error07,5,0x31C0,1C,1C,ERROR 07 table 6 final token row
+error07,6,0x31BF,E6,E6,ERROR 07 table 6 final token row
+error07,6,0x31BE,1D,1D,ERROR 07 table 6 final token row
+error07,7,0x31BD,18,18,ERROR 07 table 6 final token row
+error07,7,0x31BC,20,20,ERROR 07 table 6 final token row
+error07,8,0x31BB,0B,0B,ERROR 07 table 6 final token row
+error07,9,0x31BA,FB,FB,ERROR 07 table 6 final token row
+error07,9,0x31B9,13,13,ERROR 07 table 6 final token row
+error07,10,0x31B8,0D,0D,ERROR 07 table 6 final token row
+error07,10,0x31B7,15,15,ERROR 07 table 6 final token row
+error07,11,0x31B6,CF,CF,ERROR 07 table 6 final token row
+error07,11,0x31B5,23,23,ERROR 07 table 6 final token row
+error07,12,0x31B4,03,03,ERROR 07 table 6 final token row
+error07,13,0x31B3,43,43,ERROR 07 table 6 final token row
+error07,14,0x31B2,23,03,ERROR 07 table 6 final token row
+error07,14,0x31B1,1F,24,ERROR 07 table 6 final token row
+error07,15,0x31B0,C5,D5,ERROR 07 table 6 final token row
+error07,15,0x31AF,19,E4,ERROR 07 table 6 final token row
+error07,16,0x31AE,07,27,ERROR 07 table 6 final token row
+error07,16,0x31AD,42,38,ERROR 07 table 6 final token row
+error07,17,0x31AC,79,79,ERROR 07 table 6 final token row
+error07,17,0x31AB,34,49,ERROR 07 table 6 final token row
+error07,18,0x31AA,3B,8B,ERROR 07 table 6 final token row
+error07,18,0x31A9,26,F3,ERROR 07 table 6 final token row
+error07,19,0x31A8,9D,1E,ERROR 07 table 6 final token row
+error07,20,0x31A7,29,1E,ERROR 07 table 6 final token row
+error07,20,0x31A6,FF,26,ERROR 07 table 6 final token row
+error07,21,0x31A5,2A,60,ERROR 07 table 6 final token row
+error07,21,0x31A4,21,45,ERROR 07 table 6 final token row
+error07,22,0x31A3,29,14,ERROR 07 table 6 final token row
+error07,23,0x31A2,24,44,ERROR 07 table 6 final token row
+error07,24,0x31A1,34,14,ERROR 07 table 6 final token row
+error07,24,0x31A0,4E,44,ERROR 07 table 6 final token row
+error07,25,0x319F,18,06,ERROR 07 table 6 final token row
+error07,25,0x319E,48,47,ERROR 07 table 6 final token row
+error07,26,0x319D,A8,A8,ERROR 07 table 6 final token row
+error07,26,0x319C,43,F7,ERROR 07 table 6 final token row
+error07,27,0x319B,AA,4A,ERROR 07 table 6 final token row
+error07,27,0x319A,55,01,ERROR 07 table 6 final token row
+error07,28,0x3199,5C,2D,ERROR 07 table 6 final token row
+error07,29,0x3198,37,3D,ERROR 07 table 6 final token row
+error07,29,0x3197,7E,35,ERROR 07 table 6 final token row
+error07,30,0x3196,4A,5F,ERROR 07 table 6 final token row
+error07,30,0x3195,40,BF,ERROR 07 table 6 final token row
+error07,31,0x3194,38,32,ERROR 07 table 6 final token row
+error07,32,0x3193,33,B2,ERROR 07 table 6 final token row
+error07,32,0x3192,D3,0A,ERROR 07 table 6 final token row
+error07,33,0x3191,4C,A4,ERROR 07 table 6 final token row
+error07,33,0x3190,36,45,ERROR 07 table 6 final token row
+error07,34,0x318F,06,28,ERROR 07 table 6 final token row
+error07,35,0x318E,F4,48,ERROR 07 table 6 final token row
+error07,36,0x318D,E8,98,ERROR 07 table 6 final token row
+error07,36,0x318C,61,5D,ERROR 07 table 6 final token row
+error07,37,0x318B,8A,CA,ERROR 07 table 6 final token row
+error07,37,0x318A,53,12,ERROR 07 table 6 final token row
+error07,38,0x3189,2E,3D,ERROR 07 table 6 final token row
+error07,39,0x3188,4E,CD,ERROR 07 table 6 final token row
+error07,39,0x3187,CE,14,ERROR 07 table 6 final token row
+error07,40,0x3186,69,7F,ERROR 07 table 6 final token row
+error07,40,0x3185,20,64,ERROR 07 table 6 final token row
+error07,41,0x3184,4C,42,ERROR 07 table 6 final token row
+error07,42,0x3183,02,E2,ERROR 07 table 6 final token row
+error07,42,0x3182,46,1A,ERROR 07 table 6 final token row
+error07,43,0x3181,64,74,ERROR 07 table 6 final token row
+error07,43,0x3180,70,66,ERROR 07 table 6 final token row
+error07,44,0x317F,06,47,ERROR 07 table 6 final token row
+error07,45,0x317E,51,27,ERROR 07 table 6 final token row
+error07,45,0x317D,08,2D,ERROR 07 table 6 final token row
+error07,46,0x317C,4C,D9,ERROR 07 table 6 final token row
+error07,46,0x317B,5A,77,ERROR 07 table 6 final token row
+error07,47,0x317A,74,2B,ERROR 07 table 6 final token row
+error07,47,0x3179,4C,03,ERROR 07 table 6 final token row
+error07,48,0x3178,A1,6D,ERROR 07 table 6 final token row
+error07,48,0x3177,AE,50,ERROR 07 table 6 final token row
+error07,49,0x3176,58,41,ERROR 07 table 6 final token row
+error07,50,0x3175,A0,40,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x3174,69,41,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x3173,02,42,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x3172,A8,43,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x3171,94,44,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x3170,5E,45,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x316F,86,46,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x316E,5F,47,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x316D,78,48,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x316C,5B,49,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07,50,0x316B,4C,4A,ERROR 07 table 6 unused tail; range resolved from row 49 adjacency
+error07_dynamic_destination,1,0x3341,2F,2C,ERROR 07 table 3 dynamic destination operand
+error07_dynamic_destination,2,0x333B,26,23,ERROR 07 table 3 dynamic destination operand
+error07_dynamic_destination,3,0x3332,2F,2C,ERROR 07 table 3 dynamic destination operand

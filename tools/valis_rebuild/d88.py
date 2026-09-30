@@ -50,6 +50,7 @@ class D88Image:
         self.data = bytearray(data)
         self.sectors = sectors
         self.pointers = pointers
+        self.written_offsets: set[int] = set()
 
     @classmethod
     def read(cls, path: str | Path) -> "D88Image":
@@ -60,6 +61,8 @@ class D88Image:
     def parse(cls, data: bytes | bytearray) -> "D88Image":
         if len(data) < D88_HEADER_SIZE:
             raise BuildError(f"D88 is shorter than 0x2B0-byte header: {len(data)}")
+        if struct.unpack_from("<I", data, 0x1C)[0] != len(data):
+            raise BuildError("D88 declared disk size does not match the file size")
         pointers = [struct.unpack_from("<I", data, TRACK_POINTER_OFFSET + 4 * i)[0]
                     for i in range(TRACK_POINTER_COUNT)]
         nonzero = [(i, p) for i, p in enumerate(pointers) if p]
@@ -67,11 +70,14 @@ class D88Image:
             raise BuildError("D88 contains no track pointers")
         if any(p < D88_HEADER_SIZE or p >= len(data) for _, p in nonzero):
             raise BuildError("D88 track pointer is outside the file")
+        if any(left[1] >= right[1] for left, right in zip(nonzero, nonzero[1:])):
+            raise BuildError("D88 track pointers must be strictly increasing")
 
         sectors: list[Sector] = []
         for pos_idx, (track_index, start) in enumerate(nonzero):
             end = nonzero[pos_idx + 1][1] if pos_idx + 1 < len(nonzero) else len(data)
             pos = start
+            track_sectors: list[Sector] = []
             while pos < end:
                 if pos + SECTOR_HEADER_SIZE > end:
                     raise BuildError(f"truncated sector header at 0x{pos:X}")
@@ -94,9 +100,12 @@ class D88Image:
                     sectors_per_track=int.from_bytes(header[4:6], "little"),
                     density=header[6], deleted=header[7], status=header[8],
                 ))
+                track_sectors.append(sectors[-1])
                 pos = data_offset + length
             if pos != end:
                 raise BuildError(f"track {track_index} does not terminate at its next pointer")
+            if any(s.sectors_per_track != len(track_sectors) for s in track_sectors):
+                raise BuildError(f"track {track_index} has inconsistent sector counts")
 
         image = cls(data, sectors, pointers)
         image.validate_structure()
@@ -130,6 +139,8 @@ class D88Image:
         return matches[0]
 
     def read_data(self, offset: int, length: int) -> bytes:
+        if length < 0:
+            raise BuildError("read length cannot be negative")
         sector = self.find_data_sector(offset)
         if offset + length > sector.end:
             raise BuildError("read crosses a sector boundary; use read_data_ranges")
@@ -154,9 +165,16 @@ class D88Image:
             actual = bytes(self.data[offset:offset + len(payload)])
             if actual != expected_old:
                 raise BuildError(f"old_value mismatch at 0x{offset:X}")
+        offsets = set(range(offset, offset + len(payload)))
+        overlap = offsets & self.written_offsets
+        if overlap:
+            raise BuildError(f"overlapping component writes at 0x{min(overlap):X}")
         self.data[offset:offset + len(payload)] = payload
+        self.written_offsets.update(offsets)
 
     def write_data_ranges(self, ranges: list[tuple[int, int]], payload: bytes) -> None:
+        if any(length < 0 for _, length in ranges):
+            raise BuildError("range lengths cannot be negative")
         if sum(length for _, length in ranges) != len(payload):
             raise BuildError("range lengths do not equal payload length")
         cursor = 0

@@ -13,67 +13,400 @@
     "ips_inputs": false
   },
   "components": [
-    {"id": "original_d88_layout", "status": "accepted", "required": true},
-    {"id": "original_kanji_rom_layout", "status": "accepted", "required": true},
-    {"id": "event_block_1", "status": "accepted", "required": true},
-    {"id": "event_block_2", "status": "accepted", "required": true},
-    {"id": "event_block_3", "status": "accepted", "required": true},
-    {"id": "event_block_4", "status": "accepted", "required": true},
-    {"id": "event_block_5", "status": "accepted", "required": true},
-    {"id": "event_block_6", "status": "accepted", "required": true},
-    {"id": "gameover_fixed_1_15", "status": "accepted", "required": true},
-    {"id": "gameover_scroll_1_35", "status": "accepted", "required": true},
-    {"id": "ending_1_24", "status": "accepted", "required": true},
-    {"id": "control_tokens", "status": "accepted", "required": true},
-    {"id": "kanji_glyph_assignments", "status": "accepted", "required": true},
-    {"id": "title_logo", "status": "accepted", "required": true},
-    {"id": "error07", "status": "accepted", "required": true},
-    {"id": "debug_observations", "status": "accepted", "required": false}
+    {
+      "id": "original_d88_layout",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "original_kanji_rom_layout",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_1",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_2",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_3",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_4",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_5",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "event_block_6",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "gameover_fixed_1_15",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "gameover_scroll_1_35",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "ending_1_24",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "control_tokens",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "kanji_glyph_assignments",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "title_logo",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "error07",
+      "status": "accepted",
+      "required": true
+    },
+    {
+      "id": "debug_observations",
+      "status": "accepted",
+      "required": false
+    }
   ],
   "accepted_files": [
-    {"path": "source/text/source-index.json", "review_ids": ["TXT-001"]},
-    {"path": "source/release-baseline.json", "review_ids": ["REL-102-BASELINE"]},
-    {"path": "source/text/event-block-1.jsonl", "review_ids": ["TXT-EV1"]},
-    {"path": "source/text/event-block-2.jsonl", "review_ids": ["TXT-EV2"]},
-    {"path": "source/text/event-block-3.jsonl", "review_ids": ["TXT-EV3"]},
-    {"path": "source/text/event-block-4.jsonl", "review_ids": ["TXT-EV4"]},
-    {"path": "source/text/event-block-5.jsonl", "review_ids": ["TXT-EV5"]},
-    {"path": "source/text/event-block-6.jsonl", "review_ids": ["TXT-EV6"]},
-    {"path": "source/text/ending-24.jsonl", "review_ids": ["TXT-END"]},
-    {"path": "source/tables/events/block-1-raw-changes.csv", "review_ids": ["EV1-RAW"]},
-    {"path": "source/tables/events/block-2-raw-changes.csv", "review_ids": ["EV2-RAW"]},
-    {"path": "source/tables/events/block-3-raw-changes.csv", "review_ids": ["EV3-RAW"]},
-    {"path": "source/tables/events/block-4-raw-changes.csv", "review_ids": ["EV4-RAW"]},
-    {"path": "source/tables/events/block-5-raw-changes.csv", "review_ids": ["EV5-RAW"]},
-    {"path": "source/tables/events/block-6-raw-changes.csv", "review_ids": ["EV6-RAW"]},
-    {"path": "source/tables/ending/raw-changes.csv", "review_ids": ["END-RAW"]},
-    {"path": "source/tables/ending/layout.csv", "review_ids": ["END-LAYOUT"]},
-    {"path": "source/tables/ending/text-basecode-tokens.csv", "review_ids": ["END-TOKENS"]},
-    {"path": "source/tables/ending/quote-check.csv", "review_ids": ["END-QUOTES"]},
-    {"path": "source/text/gameover-fixed.jsonl", "review_ids": ["GO-FIXED"]},
-    {"path": "source/text/gameover-scroll.jsonl", "review_ids": ["GO-SCROLL"]},
-    {"path": "source/text/event-block-2-korean.jsonl", "review_ids": ["EV2-KOR"]},
-    {"path": "source/text/event-block-3-korean.jsonl", "review_ids": ["EV3-KOR"]},
-    {"path": "source/text/event-block-4-korean.jsonl", "review_ids": ["EV4-KOR"]},
-    {"path": "source/text/event-block-5-korean.jsonl", "review_ids": ["EV5-KOR"]},
-    {"path": "source/text/event-block-6-korean.jsonl", "review_ids": ["EV6-KOR"]},
-    {"path": "source/tables/gameover/hold-34-35.json", "review_ids": ["GO-HOLD"]},
-    {"path": "source/tables/kanji/assignments.csv", "review_ids": ["KANJI-476"]},
-    {"path": "source/tables/tokens/control-token-registry.json", "review_ids": ["TOKENS-REGISTRY"]},
-    {"path": "source/tables/logo/raw-changes.csv", "review_ids": ["LOGO-RAW"]},
-    {"path": "source/tables/logo/source-map.csv", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/tables/logo/ram-to-raw-map.csv", "review_ids": ["LOGO-RAW"]},
-    {"path": "source/GFX/MUGEN_FINAL_5C_200x24_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/GFX/MUGEN_FINAL_5D_200x24_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/GFX/MUGEN_FINAL_5E_200x24_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/GFX/MUGEN_MOVEMENT_05CE_columns_520x24_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/GFX/VALIS_5D_red_body_640x119_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/GFX/VALIS_5E_black_shadow_mask_640x119_EDIT_1x.png", "review_ids": ["LOGO-EDIT-PNG"]},
-    {"path": "source/tables/error07/raw-changes.csv", "review_ids": ["ERR07-RAW"]},
-    {"path": "source/asm/symbols.json", "review_ids": ["DEBUG-SYMBOLS"]},
-    {"path": "source/asm/source/event-consumer.asm", "review_ids": ["DEBUG-EVENT-CONSUMER"]},
-    {"path": "source/asm/source/error07-command-stream.asm", "review_ids": ["DEBUG-ERROR07"]},
-    {"path": "source/asm/source/logo-routine-observation.asm", "review_ids": ["DEBUG-LOGO"]}
+    {
+      "path": "source/text/source-index.json",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/release-baseline.json",
+      "review_ids": [
+        "REL-102-COMPONENT-CLOSURE"
+      ]
+    },
+    {
+      "path": "source/text/event-block-1.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-2.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-3.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-4.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-5.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-6.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/ending-24.jsonl",
+      "review_ids": [
+        "ENDING-24-SEGMENTS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-1-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-2-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-3-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-4-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-5-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-6-raw-changes.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/ending/raw-changes.csv",
+      "review_ids": [
+        "ENDING-24-SEGMENTS"
+      ]
+    },
+    {
+      "path": "source/tables/ending/layout.csv",
+      "review_ids": [
+        "ENDING-24-SEGMENTS"
+      ]
+    },
+    {
+      "path": "source/tables/ending/text-basecode-tokens.csv",
+      "review_ids": [
+        "ENDING-24-SEGMENTS"
+      ]
+    },
+    {
+      "path": "source/tables/ending/quote-check.csv",
+      "review_ids": [
+        "ENDING-24-SEGMENTS"
+      ]
+    },
+    {
+      "path": "source/text/gameover-fixed.jsonl",
+      "review_ids": [
+        "GAMEOVER-STRUCTURE"
+      ]
+    },
+    {
+      "path": "source/text/gameover-scroll.jsonl",
+      "review_ids": [
+        "GAMEOVER-STRUCTURE"
+      ]
+    },
+    {
+      "path": "source/text/event-block-2-korean.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-3-korean.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-4-korean.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-5-korean.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/text/event-block-6-korean.jsonl",
+      "review_ids": [
+        "TEXT-ORIGINAL-KOREAN-SOURCES"
+      ]
+    },
+    {
+      "path": "source/tables/gameover/hold-34-35.json",
+      "review_ids": [
+        "GAMEOVER-HOLD"
+      ]
+    },
+    {
+      "path": "source/tables/kanji/assignments.csv",
+      "review_ids": [
+        "KANJI-476-TXT"
+      ]
+    },
+    {
+      "path": "source/tables/tokens/control-token-registry.json",
+      "review_ids": [
+        "TOKEN-CONSUMER"
+      ]
+    },
+    {
+      "path": "source/tables/logo/raw-changes.csv",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/tables/logo/source-map.csv",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/tables/logo/ram-to-raw-map.csv",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/MUGEN_FINAL_5C_200x24_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/MUGEN_FINAL_5D_200x24_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/MUGEN_FINAL_5E_200x24_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/MUGEN_MOVEMENT_05CE_columns_520x24_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/VALIS_5D_red_body_640x119_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/GFX/VALIS_5E_black_shadow_mask_640x119_EDIT_1x.png",
+      "review_ids": [
+        "LOGO-RAW-MAP"
+      ]
+    },
+    {
+      "path": "source/tables/error07/raw-changes.csv",
+      "review_ids": [
+        "ERROR07-FINAL-TABLE"
+      ]
+    },
+    {
+      "path": "source/asm/symbols.json",
+      "review_ids": [
+        "DEBUG-OBSERVATIONS"
+      ]
+    },
+    {
+      "path": "source/asm/source/event-consumer.asm",
+      "review_ids": [
+        "DEBUG-OBSERVATIONS"
+      ]
+    },
+    {
+      "path": "source/asm/source/error07-command-stream.asm",
+      "review_ids": [
+        "DEBUG-OBSERVATIONS"
+      ]
+    },
+    {
+      "path": "source/asm/source/logo-routine-observation.asm",
+      "review_ids": [
+        "DEBUG-OBSERVATIONS"
+      ]
+    },
+    {
+      "path": "source/media/d88-layout.json",
+      "review_ids": [
+        "D88-ORIGINAL-GEOMETRY"
+      ]
+    },
+    {
+      "path": "source/media/kanji1-layout.json",
+      "review_ids": [
+        "KANJI-476-TXT"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-2-audit.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-3-audit.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-4-audit.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-5-audit.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/events/block-6-audit.csv",
+      "review_ids": [
+        "EVENTS-RAW-OLD-GUARDS"
+      ]
+    },
+    {
+      "path": "source/tables/kanji/gameover-token-assignments.csv",
+      "review_ids": [
+        "KANJI-476-TXT"
+      ]
+    },
+    {
+      "path": "source/tables/error07/input-provenance.json",
+      "review_ids": [
+        "ERROR07-FINAL-TABLE"
+      ]
+    }
   ],
   "review": {
     "reviewer": "근거 장부 검토 완료",

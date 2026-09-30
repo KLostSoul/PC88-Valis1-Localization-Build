@@ -1,65 +1,12 @@
 {
-  "body_range": "0x9680~0xA24D",
-  "body_length_bytes": 3022,
-  "terminator_expected": "0xA24E=0F",
-  "remaining_bytes_against_0xA27F": 50,
-  "stats": {
-    "data_rows": 1381,
-    "character_rows": 1162,
-    "control_rows": 219,
-    "orange_hangul_speech_rows": 487,
-    "green_hangul_general_rows": 205,
-    "punctuation_or_space_rows": 465,
-    "red_manual_rows": 5,
-    "red_manual_bytes_preserved_rows": 5,
-    "existing_control_bytes_preserved_rows": 219,
-    "existing_nonhangul_bytes_preserved_rows": 0,
-    "left_quote_88_22_rows": 1,
-    "right_quote_98_22_rows": 1,
-    "blank_or_deleted_rows_ignored": 0,
-    "final_character_slots": 1162
-  },
-  "red_manual_policy": "red rows preserved if present",
-  "red_manual_ranges": [
-    {
-      "row": 1118,
-      "addr": "0xA01D~0xA021",
-      "char": "레",
-      "bytes": "A1 31 34 31 00"
-    },
-    {
-      "row": 1119,
-      "addr": "0xA022~0xA026",
-      "char": "이",
-      "bytes": "91 DE 34 31 00"
-    },
-    {
-      "row": 1120,
-      "addr": "0xA027~0xA02B",
-      "char": "코",
-      "bytes": "11 E2 34 31 00"
-    },
-    {
-      "row": 1128,
-      "addr": "0xA040~0xA044",
-      "char": "레",
-      "bytes": "A1 31 34 31 00"
-    },
-    {
-      "row": 1129,
-      "addr": "0xA045~0xA049",
-      "char": "이",
-      "bytes": "91 DE 34 35 00"
-    }
-  ],
-  "keyfix_policy": "0x29,0x28,0x28",
-  "warnings": [],
+  "schema": "valis-event-text-validation/v1",
+  "source_table": "source/text/event-block-5-korean.jsonl",
+  "audit_table": "source/tables/events/block-5-audit.csv",
+  "rows": 1381,
+  "token_bytes": 3022,
   "verification": {
-    "bad_rule_count": 0,
-    "control_bytes_preserved": true,
-    "addresses_reassigned_by_length_column": true,
-    "sequence_reassigned_by_row_order": true,
-    "slots_reassigned_by_character_row_order": true,
-    "character_bytes_reassigned": true
+    "row_numbers_contiguous": true,
+    "token_lengths_match_ranges": true,
+    "tokens_match_audit_and_raw_tables": true
   }
 }

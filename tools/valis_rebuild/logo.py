@@ -64,6 +64,8 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
 
 def load_binary_png_rows(path: Path, expected_w: int, expected_h: int, width_bytes: int) -> list[list[int]]:
     """Decode a binary black/white PNG without third-party packages."""
+    if expected_w <= 0 or expected_h <= 0 or width_bytes * 8 != expected_w:
+        raise BuildError("invalid packed PNG dimensions")
     try:
         data = path.read_bytes()
     except OSError as exc:
@@ -77,7 +79,7 @@ def load_binary_png_rows(path: Path, expected_w: int, expected_h: int, width_byt
     palette = None
     transparency = None
     idat = bytearray()
-    saw_idat = False
+    saw_iend = False
     while pos < len(data):
         if pos + 12 > len(data):
             raise BuildError(f"{path}: truncated PNG chunk")
@@ -91,26 +93,30 @@ def load_binary_png_rows(path: Path, expected_w: int, expected_h: int, width_byt
         if zlib.crc32(chunk_type + chunk) & 0xFFFFFFFF != expected_crc:
             raise BuildError(f"{path}: invalid PNG CRC in {chunk_type!r} chunk")
         pos = end + 4
+        if ihdr is None and chunk_type != b"IHDR":
+            raise BuildError(f"{path}: IHDR must be the first PNG chunk")
         if chunk_type == b"IHDR":
             if ihdr is not None or length != 13:
                 raise BuildError(f"{path}: invalid IHDR")
             ihdr = chunk
         elif chunk_type == b"PLTE":
-            if length == 0 or length % 3:
+            if palette is not None or length == 0 or length % 3 or length > 768:
                 raise BuildError(f"{path}: invalid PNG palette")
             palette = [tuple(chunk[i:i + 3]) for i in range(0, length, 3)]
         elif chunk_type == b"tRNS":
             transparency = chunk
         elif chunk_type == b"IDAT":
-            saw_idat = True
             idat.extend(chunk)
         elif chunk_type == b"IEND":
+            if length != 0 or pos != len(data):
+                raise BuildError(f"{path}: invalid IEND or trailing PNG data")
+            saw_iend = True
             break
-        elif saw_idat and chunk_type[0] & 0x20 == 0:
+        elif chunk_type[0] & 0x20 == 0:
             raise BuildError(f"{path}: unsupported critical PNG chunk {chunk_type!r}")
 
-    if ihdr is None or not idat:
-        raise BuildError(f"{path}: missing IHDR or image data")
+    if ihdr is None or not idat or not saw_iend:
+        raise BuildError(f"{path}: missing IHDR, image data, or IEND")
     w, h, bit_depth, color_type, comp, filt, interlace = struct.unpack(">IIBBBBB", ihdr)
     if (w, h) != (expected_w, expected_h):
         raise BuildError(f"{path}: expected {expected_w}x{expected_h}, got {w}x{h}")
@@ -188,9 +194,9 @@ def load_binary_png_rows(path: Path, expected_w: int, expected_h: int, width_byt
     def classify(r: int, g: int, b: int, alpha: int = 255) -> int:
         if alpha != 255:
             raise BuildError(f"{path}: transparent/alpha pixels are not allowed")
-        if r <= 15 and g <= 15 and b <= 15:
+        if (r, g, b) == (0, 0, 0):
             return 0
-        if r >= 240 and g >= 240 and b >= 240:
+        if (r, g, b) == (255, 255, 255):
             return 1
         raise BuildError(f"{path}: non-binary/antialiased pixel RGB=({r},{g},{b})")
 
@@ -317,6 +323,8 @@ def decode_05ce_columns(source: bytes, calls: int, height: int) -> list[list[int
                 offset += 3
                 if count == 0:
                     raise BuildError("zero-length 05CE alternating run")
+                if len(column) + count * 2 > height:
+                    raise BuildError("05CE alternating run overflows the column")
                 for _ in range(count):
                     if len(column) < height:
                         column.append(first)
@@ -399,6 +407,10 @@ def _exact_total_encodings(calls: list[dict[int, bytes]], exact_length: int, lab
 
 def encode_061f_planes(planes: dict[str, list[list[int]]], width: int, height: int,
                        plane_names: tuple[str, ...], exact_length: int) -> bytes:
+    if width <= 0 or height <= 0 or set(planes) != set(plane_names) or not plane_names:
+        raise BuildError("invalid 061F plane configuration")
+    if any(len(planes[plane]) != height or any(len(row) != width for row in planes[plane]) for plane in plane_names):
+        raise BuildError("061F plane dimensions do not match the declared size")
     calls: list[dict[int, bytes]] = []
     for y in range(height):
         for plane in plane_names:
@@ -536,6 +548,7 @@ def _read_ram_map(root: Path) -> dict[int, dict[str, str]]:
     path = root / "source/tables/logo/ram-to-raw-map.csv"
     rows = _read_csv(path)
     result: dict[int, dict[str, str]] = {}
+    raw_offsets: set[int] = set()
     for row in rows:
         try:
             address = int(row["ram_addr"], 16)
@@ -543,6 +556,26 @@ def _read_ram_map(root: Path) -> dict[int, dict[str, str]]:
             raise BuildError(f"invalid ram_addr in {path}") from exc
         if address in result:
             raise BuildError(f"duplicate RAM address in {path}: 0x{address:04X}")
+        try:
+            raw_offset = int(row["raw_file_offset"], 16)
+            raw_index = int(row["raw_index"], 16)
+            raw_base = int(row["sector_raw_base"], 16)
+            cylinder = int(row["d88_c"], 16)
+            stored = int(row["stored_byte"], 16)
+            raw = int(row["current_raw_byte"], 16)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise BuildError(f"invalid logo mapping at RAM 0x{address:04X}") from exc
+        if not 0 <= address <= 0xFFFF or not 0 <= raw_index < 0x400:
+            raise BuildError(f"logo map address/index is out of range: 0x{address:04X}")
+        if raw_offset != raw_base + raw_index or raw_offset in raw_offsets:
+            raise BuildError(f"invalid or duplicate logo raw offset: 0x{raw_offset:X}")
+        if not 0 <= stored <= 255 or not 0 <= raw <= 255:
+            raise BuildError(f"logo mapping byte is out of range at 0x{address:04X}")
+        de = 0x400 - raw_index
+        recovered = (raw - (de >> 8) - (de & 255) + 0x40 - cylinder) & 255
+        if recovered != stored:
+            raise BuildError(f"logo map roundtrip mismatch at 0x{address:04X}")
+        raw_offsets.add(raw_offset)
         result[address] = row
     return result
 
@@ -585,6 +618,9 @@ def lint_logo_inputs(root: str | Path) -> dict:
     """Validate declared PNGs and report edited groups without requiring a ROM image."""
     root = Path(root)
     groups, _loaded, _pixel_hashes, changed_groups = _load_logo_images(root)
+    ram_map = _read_ram_map(root)
+    for group in groups:
+        _original_source(ram_map, group.base, group.length)
     changed_targets = {
         image.target
         for group in changed_groups
@@ -675,7 +711,7 @@ def apply_logo_build(image: D88Image, plan: LogoBuildPlan) -> dict | None:
             recovered = (new_raw - d - e + correction) & 0xFF
             if recovered != stored:
                 raise BuildError(f"logo raw reverse check failed at RAM 0x{address:04X}")
-            image.data[raw_offset] = new_raw
+            image.write_data(raw_offset, bytes([new_raw]), expected_old=bytes([expected_raw]))
             changed += int(actual_raw != new_raw)
         total_writes += len(logo.data)
         total_changed += changed

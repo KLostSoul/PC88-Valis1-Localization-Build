@@ -1,48 +1,13 @@
 {
-  "purpose": "Block 4 final Korean patch v3 after speech-row recoloring from 811-row document.",
-  "runtime_range_written": "0x9680~0x9D94",
-  "body_runtime_range": "0x9680~0x9D93",
-  "terminator": "0x9D94=0F",
-  "decoded_bytes_written": 1813,
-  "document_validation": {
-    "data_rows": 811,
-    "character_rows": 684,
-    "control_rows": 127,
-    "orange_hangul_speech_rows": 405,
-    "nonorange_hangul_general_rows": 35,
-    "punctuation_or_space_rows": 244,
-    "left_quote_88_22_rows": 0,
-    "right_quote_98_22_rows": 0,
-    "bad_doc_rule_count": 0,
-    "unknown_count": 0
-  },
-  "payload_map": [
-    {
-      "runtime": "0x9680~0x9A7F",
-      "payload": "0x1C320~0x1C71F",
-      "key": "0x29"
-    },
-    {
-      "runtime": "0x9A80~0x9E7F",
-      "payload": "0x1C730~0x1CB2F",
-      "key": "0x29"
-    }
-  ],
-  "changes": {
-    "changed_byte_count": 1701,
-    "changed_records_count": 1701,
-    "min_changed_offset": "0x1C320",
-    "max_changed_offset": "0x1CB2F",
-    "outside_payload_change_count": 0
-  },
+  "schema": "valis-event-source-validation/v1",
+  "source_table": "source/tables/events/block-4-raw-changes.csv",
+  "logical_rows": 802,
+  "raw_byte_writes": 1701,
+  "input_d88_sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
   "verification": {
-    "decoded_after_matches_document_stream": true,
-    "mismatch_count": 0,
-    "only_declared_payload_segments_changed": true,
-    "file_size_unchanged": true
-  },
-  "file_size_original": 414992,
-  "file_size_output": 414992,
-  "sha256_original": "ae9e0d57219763cc575e66d38e92c78e7f3fc7a6acdeba0e5f13d7f7dd920a44",
-  "sha256_output": "008d310311688130169c836239b58fea2da7d74f2a2a5daf2b81a0cbb8906879"
+    "unique_disk_offsets": true,
+    "raw_old_matches_input": true,
+    "decoded_bytes_match_raw": true,
+    "writes_inside_payload": true
+  }
 }

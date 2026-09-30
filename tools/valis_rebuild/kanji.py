@@ -24,7 +24,7 @@ class GlyphAssignment:
 
 
 def load_assignments(path: str | Path, source_root: str | Path) -> list[GlyphAssignment]:
-    source_root = Path(source_root)
+    source_root = Path(source_root).resolve()
     rows: list[GlyphAssignment] = []
     with Path(path).open(encoding="utf-8-sig", newline="") as handle:
         for raw in csv.DictReader(handle):
@@ -44,6 +44,17 @@ def load_assignments(path: str | Path, source_root: str | Path) -> list[GlyphAss
                 raise BuildError(f"KANJI assignment is not confirmed: {assignment.index}")
             if assignment.rom_offset != assignment.slot * GLYPH_SIZE:
                 raise BuildError(f"KANJI slot/offset mismatch: {assignment.index}")
+            if not 0 <= assignment.slot < ROM_SIZE // GLYPH_SIZE:
+                raise BuildError(f"KANJI slot is outside the ROM: {assignment.index}")
+            try:
+                assignment.source.resolve().relative_to(source_root)
+            except ValueError as exc:
+                raise BuildError(f"KANJI source path escapes source/kanji: {assignment.index}") from exc
+            if len(assignment.token) != 4 or any(c not in "0123456789ABCDEF" for c in assignment.token):
+                raise BuildError(f"invalid KANJI token: {assignment.index}")
+            token_address = int.from_bytes(bytes.fromhex(assignment.token), "little")
+            if token_address & 0x0F or token_address >> 4 != assignment.slot:
+                raise BuildError(f"KANJI token/slot mismatch: {assignment.index}")
             rows.append(assignment)
     if len(rows) != 476:
         raise BuildError(f"expected 476 explicit KANJI assignments, got {len(rows)}")
@@ -51,6 +62,8 @@ def load_assignments(path: str | Path, source_root: str | Path) -> list[GlyphAss
         raise BuildError("KANJI assignment indices must be exactly 1..476")
     if len({row.slot for row in rows}) != len(rows):
         raise BuildError("duplicate KANJI slot")
+    if len({row.unicode for row in rows}) != len(rows):
+        raise BuildError("duplicate KANJI Unicode assignment")
     return rows
 
 
@@ -76,6 +89,8 @@ def build_rom(original: bytes, assignments: list[GlyphAssignment]) -> tuple[byte
     output = bytearray(original)
     report = []
     for assignment in assignments:
+        if not 0 <= assignment.rom_offset <= ROM_SIZE - GLYPH_SIZE:
+            raise BuildError(f"KANJI write is outside the ROM: {assignment.index}")
         glyph = read_visual_txt(assignment.source)
         before = bytes(output[assignment.rom_offset:assignment.rom_offset + GLYPH_SIZE])
         output[assignment.rom_offset:assignment.rom_offset + GLYPH_SIZE] = glyph

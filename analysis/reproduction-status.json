@@ -10,19 +10,73 @@
     "reference_bytes_stored_in_repository": false
   },
   "original_inputs": {
-    "d88": {"size": 414992, "sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf", "sectors": 422, "flat_payload_bytes": 407552},
-    "kanji1": {"size": 131072, "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb"}
+    "d88": {
+      "size": 414992,
+      "sha256": "7404998ee7e94e14d065a11e55bc26f7f8733202eec6774610a20a6d0b5a1fdf",
+      "sectors": 422,
+      "flat_payload_bytes": 407552
+    },
+    "kanji1": {
+      "size": 131072,
+      "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb"
+    }
   },
   "source_tables": {
-    "events": {"blocks": 6, "raw_change_rows": {"1": 1449, "2": 3536, "3": 1934, "4": 1701, "5": 2848, "6": 817}},
-    "gameover": {"fixed_segments": 15, "scroll_blocks": 35, "hold_records": 1},
-    "ending": {"segments": 24, "stream_bytes_through_24th_terminator": 3622, "terminators": 24},
-    "kanji": {"explicit_assignments": 476},
-    "final_component_updates": {"gameover_scroll_token_rows": 24, "logo_raw_rows": 7521, "logo_raw_rows_role": "accepted baseline literal rows; edited PNG groups use source-map plus RAM-to-raw mapping", "event_raw_byte_updates": 11, "error07_raw_byte_updates": 11}
+    "events": {
+      "blocks": 6,
+      "raw_change_rows": {
+        "1": 659,
+        "2": 1640,
+        "3": 973,
+        "4": 802,
+        "5": 1364,
+        "6": 404
+      },
+      "raw_write_bytes": {
+        "1": 1449,
+        "2": 3536,
+        "3": 1934,
+        "4": 1701,
+        "5": 2848,
+        "6": 817
+      }
+    },
+    "gameover": {
+      "fixed_segments": 15,
+      "scroll_blocks": 35,
+      "hold_records": 1
+    },
+    "ending": {
+      "segments": 24,
+      "stream_bytes_through_24th_terminator": 3622,
+      "terminators": 24
+    },
+    "kanji": {
+      "explicit_assignments": 476
+    },
+    "final_component_updates": {
+      "gameover_scroll_token_rows": 24,
+      "logo_raw_rows": 7521,
+      "logo_raw_rows_role": "accepted baseline literal rows; edited PNG groups use source-map plus RAM-to-raw mapping",
+      "event_raw_byte_updates": 11,
+      "error07_raw_byte_updates": 11
+    }
   },
   "release_outputs": {
-    "d88": {"size": 414992, "sha256": "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8"},
-    "kanji1": {"size": 131072, "sha256": "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a"}
+    "d88": {
+      "size": 414992,
+      "sha256": "18e274dc730902f90e4d3939ad3ac2853c927d19baf896cee88e5b22321427b8"
+    },
+    "kanji1": {
+      "size": 131072,
+      "sha256": "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a"
+    }
   },
-  "release_gate": {"source_lint": "required", "tests": 10, "input_hash": "required", "output_hash": "required", "local_reference_compare": "0 D88 file bytes"}
+  "release_gate": {
+    "source_lint": "required",
+    "input_hash": "required",
+    "output_hash": "baseline comparison and current-source verification",
+    "local_reference_compare": "0 D88 file bytes",
+    "tests": "required; original media located by input hashes"
+  }
 }
