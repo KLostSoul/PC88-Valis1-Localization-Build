@@ -13,8 +13,8 @@
 
 - `analysis/`: 분석 근거 장부와 디버거 관찰 자료
 - `source/`: 원문·한글 번역·제어 토큰·직접 바이트·로고 PNG 및 로고 빌드 설정·KANJI1 글리프 원천표
-- `tools/valis_rebuild/`: D88 처리기, 원본 바이트 검사기, 매니페스트 기반 로고 PNG 인코더, 직접 기록기, ROM·IPS 생성기
-- `tests/`: 소스·구조·직렬화·통합 검증
+- `tools/valis_rebuild/`: D88 처리기, 원본 바이트 검사기, 매니페스트 기반 로고 PNG 인코더, 직접 기록기, ROM·IPS 생성기 ([도구 안내](tools/README.md))
+- `tests/`: 소스·구조·직렬화·통합 검증 ([테스트 안내](tests/README.md))
 - `docs/`: 작업 문서
 
 ## 빌드 원칙
