@@ -349,7 +349,7 @@ class MediaContractTests(unittest.TestCase):
                         d88=str(root / "output"), rom=str(root / "output"),
                         original_d88=str(ORIGINAL_D88), original_rom=str(ORIGINAL_ROM), report=None))
                 self.assertTrue(verified["matches_current_source"])
-                self.assertEqual(len(list((root / "output").iterdir())), 2)
+                self.assertEqual(len(list((root / "output").iterdir())), 4)
             finally:
                 for path, content in saved_images.items():
                     path.write_bytes(content)

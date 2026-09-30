@@ -37,9 +37,9 @@ python -m tools.valis_rebuild compare --built output --reference 결과 --fail-o
 | `source-lint` | 확정 표·경로·해시 계약, 로고 source-map 설정과 PNG 형식·크기·기준 픽셀 해시 | 없음 |
 | `text-lint` | 원문·번역·토큰·번호 체계 | 없음 |
 | `export-original` | 원본 D88 트랙·섹터·payload 구조 | 없음 |
-| `build-d88` | 원본 가드, 직접 raw 기록, 로고 PNG 인코딩 | 출력 생성 |
-| `build-rom` | 476개 글리프와 ROM 오프셋 | 출력 생성 |
-| `verify` | 원본 입력과 현재 소스로 재빌드한 결과의 해시·구조 대조 | 없음 |
+| `build-d88` | 원본 가드, 직접 raw 기록, 로고 PNG 인코딩, D88 IPS 생성·재적용 검사 | 출력 생성 |
+| `build-rom` | 476개 글리프와 ROM 오프셋, KANJI1 IPS 생성·재적용 검사 | 출력 생성 |
+| `verify` | 현재 소스로 재빌드한 결과의 해시·구조 대조, 출력 폴더의 IPS 재적용 검사 | 없음 |
 | `compare` | 기준 파일과 결과의 차이 | 없음 |
 
 불일치가 나오면 소스 행과 분석 근거를 다시 검토합니다.

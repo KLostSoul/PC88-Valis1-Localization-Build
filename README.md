@@ -13,7 +13,7 @@
 
 - `analysis/`: 분석 근거 장부와 디버거 관찰 자료
 - `source/`: 원문·한글 번역·제어 토큰·직접 바이트·로고 PNG 및 로고 빌드 설정·KANJI1 글리프 원천표
-- `tools/valis_rebuild/`: D88 처리기, 원본 바이트 검사기, 매니페스트 기반 로고 PNG 인코더, 직접 기록기, ROM 생성기
+- `tools/valis_rebuild/`: D88 처리기, 원본 바이트 검사기, 매니페스트 기반 로고 PNG 인코더, 직접 기록기, ROM·IPS 생성기
 - `tests/`: 소스·구조·직렬화·통합 검증
 - `docs/`: 작업 문서
 
@@ -26,7 +26,7 @@
         ↓ 원본 바이트 대조와 로고 PNG 인코딩
 원본 D88/ROM 복사본에 기록
         ↓ 구조·해시·테스트 검증
-재현된 D88/ROM
+재현된 D88/ROM과 각각의 IPS
 ```
 
 ## 실행
@@ -67,7 +67,7 @@ python -m tools.valis_rebuild verify --d88 output --rom output
 python -m tools.valis_rebuild compare --built output --reference 결과 --fail-on-diff
 ```
 
-결과 D88과 KANJI1 ROM은 `output/`에 생성됩니다.
+결과 D88·KANJI1 ROM과 각 원본용 IPS 패치는 `output/`에 생성됩니다.
 
 ## 문서
 

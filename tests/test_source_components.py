@@ -90,7 +90,9 @@ class SourceComponentTests(unittest.TestCase):
             self.assertTrue(kanji["exact_release_match"])
             self.assertEqual(kanji["output"]["sha256"], "6856eed33acac7f5930231d6ffab735a6aeaa700aabc22961e15e340b21ea72a")
             self.assertEqual(kanji["output"]["path"], str(output / "KANJI1(K).ROM"))
-            self.assertEqual(len(list(output.iterdir())), 2)
+            self.assertTrue(disk["ips"]["reapplied_matches_output"])
+            self.assertTrue(kanji["ips"]["reapplied_matches_output"])
+            self.assertEqual(len(list(output.iterdir())), 4)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,8 @@ import tempfile
 from .d88 import D88Image
 from .gameover import apply_gameover
 from .kanji import build_rom, load_assignments
+from .ips import apply_ips, encode_ips
+from .outputs import publish_outputs
 from .logo import apply_logo_build, prepare_logo_build
 from .serializer import apply_hold_patch, apply_raw_tables
 from .source_gate import require_buildable
@@ -32,20 +34,24 @@ def _baseline(root: Path) -> dict:
     return json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
 
 
-def _write_output(path: Path, data: bytes | bytearray) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(prefix=".valis-", dir=path.parent, delete=False) as handle:
-        staged = Path(handle.name)
-        try:
-            handle.write(data)
-        except OSError:
-            handle.close()
-            staged.unlink(missing_ok=True)
-            raise
-    try:
-        staged.replace(path)
-    finally:
-        staged.unlink(missing_ok=True)
+def _write_build_outputs(output: Path, original: bytes, target: bytes, input_path: Path) -> dict:
+    ips_bytes = encode_ips(original, target)
+    if apply_ips(original, ips_bytes) != target:
+        raise ValueError("IPS를 원본에 적용한 결과가 빌드 출력과 다릅니다")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".valis-build-", dir=output.parent) as directory:
+        staging = Path(directory)
+        image_path = staging / output.name
+        ips_path = image_path.with_suffix(".ips")
+        image_path.write_bytes(target)
+        ips_path.write_bytes(ips_bytes)
+        artifacts = {
+            "output": {"path": str(image_path), "sha256": hashlib.sha256(target).hexdigest(), "size": len(target)},
+            "ips": {"path": str(ips_path), "sha256": hashlib.sha256(ips_bytes).hexdigest(),
+                    "size": len(ips_bytes), "reapplied_matches_output": True},
+        }
+        publish_outputs((artifacts,), output.parent, {input_path.resolve()})
+    return artifacts
 
 
 def _require_input(
@@ -98,15 +104,14 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
         raise ValueError("D88 output would overwrite the original input")
     exact_release_match = image.sha256() == baseline["output"]["d88_sha256"]
     D88Image.parse(image.data)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    _write_output(output, image.data)
+    artifacts = _write_build_outputs(output, original, bytes(image.data), input_path)
     log = {
         "schema": "valis-reproduction-log/v1",
         "kind": "d88",
         "input": {"path": str(input_path), "sha256": hashlib.sha256(original).hexdigest()},
         "source_tree_sha256": source_tree_hash(root),
         "component_reports": component_reports,
-        "output": {"path": str(output), "sha256": image.sha256(), "size": len(image.data)},
+        **artifacts,
         "structure": {"sectors": len(image.sectors), "flat_payload": len(image.flatten_payload())},
         "expected_output_sha256": baseline["output"]["d88_sha256"],
         "exact_release_match": exact_release_match,
@@ -142,8 +147,7 @@ def build_kanji(
     if output.resolve() == input_path.resolve():
         raise ValueError("KANJI1 output would overwrite the original input")
     exact_release_match = hashlib.sha256(output_bytes).hexdigest() == baseline["output"]["kanji1_sha256"]
-    output_dir.mkdir(parents=True, exist_ok=True)
-    _write_output(output, output_bytes)
+    artifacts = _write_build_outputs(output, original, output_bytes, input_path)
     log = {
         "schema": "valis-reproduction-log/v1",
         "kind": "kanji1",
@@ -152,7 +156,7 @@ def build_kanji(
         "source_tree_sha256": source_tree_hash(root),
         "assignments": len(assignments),
         "changed_slots": sum(item["changed"] for item in glyph_report),
-        "output": {"path": str(output), "sha256": hashlib.sha256(output_bytes).hexdigest(), "size": len(output_bytes)},
+        **artifacts,
         "expected_output_sha256": baseline["output"]["kanji1_sha256"],
         "exact_release_match": exact_release_match,
         "status": "OK",

@@ -7,11 +7,12 @@ import hashlib
 import json
 from pathlib import Path
 import tempfile
-import shutil
 
 from .d88 import D88Image
 from .errors import BuildError
+from .ips import apply_ips
 from .pipeline import build_disk, build_kanji
+from .outputs import publish_outputs as _publish_outputs
 from .source_gate import lint_all
 from .text_sources import lint_text_sources
 
@@ -27,34 +28,6 @@ def _write_json(path: Path, value: object) -> None:
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _publish_outputs(reports: tuple[dict, ...], output: Path, inputs: set[Path]) -> None:
-    destinations: list[tuple[dict, Path, Path, Path | None]] = []
-    for report in reports:
-        staged = Path(report["output"]["path"])
-        destination = output / staged.name
-        if destination.resolve() in inputs:
-            raise BuildError(f"출력이 원본 입력을 덮어씁니다: {destination}")
-        if destination.exists() and not destination.is_file():
-            raise BuildError(f"출력 경로가 파일이 아닙니다: {destination}")
-        previous = staged.with_name(staged.name + ".previous") if destination.exists() else None
-        if previous is not None:
-            shutil.copy2(destination, previous)
-        destinations.append((report, staged, destination, previous))
-    published: list[tuple[Path, Path | None]] = []
-    try:
-        for report, staged, destination, previous in destinations:
-            staged.replace(destination)
-            published.append((destination, previous))
-            report["output"]["path"] = str(destination)
-    except OSError:
-        for destination, previous in reversed(published):
-            if previous is None:
-                destination.unlink()
-            else:
-                previous.replace(destination)
-        raise
 
 
 def _resolve_hashed_input(path: Path, *, expected_hash: str, expected_size: int,
@@ -199,6 +172,19 @@ def command_build(args: argparse.Namespace) -> dict:
     return result
 
 
+def _verify_ips(image_path: Path, original_path: Path, *, required: bool) -> dict | None:
+    patch_path = image_path.with_suffix(".ips")
+    if not patch_path.exists() and not required:
+        return None
+    if not patch_path.is_file():
+        raise BuildError(f"IPS 파일을 찾을 수 없습니다: {patch_path}")
+    patch_bytes = patch_path.read_bytes()
+    if apply_ips(original_path.read_bytes(), patch_bytes) != image_path.read_bytes():
+        raise BuildError(f"IPS 재적용 결과가 출력 이미지와 다릅니다: {patch_path}")
+    return {"path": str(patch_path), "sha256": hashlib.sha256(patch_bytes).hexdigest(),
+            "size": len(patch_bytes), "reapplied_matches_output": True}
+
+
 def command_verify(args: argparse.Namespace) -> dict:
     root = repo_root()
     baseline = json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
@@ -216,6 +202,9 @@ def command_verify(args: argparse.Namespace) -> dict:
         if result["sha256"] != expected["output"]["sha256"]:
             raise BuildError("D88 출력이 현재 소스의 빌드 결과와 다릅니다")
     result["matches_current_source"] = True
+    disk_ips = _verify_ips(source, original_d88, required=Path(args.d88).is_dir())
+    if disk_ips is not None:
+        result["ips"] = disk_ips
     if args.rom:
         rom = _resolve_unique_file(Path(args.rom), label="KANJI1 output", suffix=".rom")
         rom_data = rom.read_bytes()
@@ -235,6 +224,9 @@ def command_verify(args: argparse.Namespace) -> dict:
             if result["kanji1"]["sha256"] != expected["output"]["sha256"]:
                 raise BuildError("KANJI1 출력이 현재 소스의 빌드 결과와 다릅니다")
         result["kanji1"]["matches_current_source"] = True
+        rom_ips = _verify_ips(rom, original_rom, required=Path(args.rom).is_dir())
+        if rom_ips is not None:
+            result["kanji1"]["ips"] = rom_ips
     if args.report:
         _write_json(Path(args.report).resolve(), result)
     return result
@@ -289,12 +281,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="직접 ROM 파일을 지정했을 때 기준 해시가 다른 입력도 허용하고 결과 보고서에 차이를 기록",
     )
     build_rom.set_defaults(handler=command_build_rom)
-    build = sub.add_parser("build", help="D88 로고 PNG와 KANJI1을 함께 재현 빌드")
+    build = sub.add_parser("build", help="D88·KANJI1 ROM과 IPS 패치를 함께 빌드")
     build.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
     build.add_argument("--rom", required=True, help="원본 KANJI1 ROM 파일 또는 SHA-256으로 찾을 후보 폴더")
     build.add_argument("--out", default="output", help="출력 디렉터리")
     build.set_defaults(handler=command_build)
-    verify = sub.add_parser("verify", help="출력 D88/ROM 구조·크기·해시 검증")
+    verify = sub.add_parser("verify", help="출력 D88/ROM과 IPS 재적용 검증")
     verify.add_argument("--d88", required=True, help="검증할 D88 경로")
     verify.add_argument("--rom", help="검증할 KANJI1 ROM 경로")
     verify.add_argument("--original-d88", default="import", help="검증에 사용할 원본 D88 입력")
