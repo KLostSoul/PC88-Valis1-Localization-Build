@@ -28,7 +28,7 @@
 - 재조립된 D88
 - 재생성된 KANJI1 ROM
 
-기본 출력은 저장소 루트에 생성합니다. `--out`으로 다른 출력 디렉터리를 지정할 수 있습니다.
+기본 출력은 `output/`에 생성합니다. `--out`으로 다른 출력 디렉터리를 지정할 수 있습니다.
 
 원본 D88·ROM은 로컬 `import/` 또는 직접 지정한 경로에서 읽습니다.
 
@@ -92,8 +92,8 @@ PYTHONPATH=. python -m tools.valis_rebuild build \
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 . \
-  --rom .
+  --d88 output \
+  --rom output
 
 PYTHONPATH=. python -m unittest discover -s tests -v
 ```

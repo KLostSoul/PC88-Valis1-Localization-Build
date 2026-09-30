@@ -24,15 +24,15 @@ PYTHONPATH=. python -m tools.valis_rebuild build \
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 . \
-  --rom .
+  --d88 output \
+  --rom output
 ```
 
 빌드 결과를 기준 D88과 바이트 단위로 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built . \
+  --built output \
   --reference 결과 \
   --fail-on-diff
 ```

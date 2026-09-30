@@ -32,5 +32,5 @@
 PYTHONPATH=. python -m tools.valis_rebuild source-lint
 PYTHONPATH=. python -m tools.valis_rebuild text-lint
 PYTHONPATH=. python -m tools.valis_rebuild build --d88 import --rom import
-PYTHONPATH=. python -m tools.valis_rebuild verify --d88 . --rom .
+PYTHONPATH=. python -m tools.valis_rebuild verify --d88 output --rom output
 ```

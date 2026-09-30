@@ -64,22 +64,22 @@ KANJI1 ROM에 476개 글리프를 적용합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 . \
-  --rom .
+  --d88 output \
+  --rom output
 ```
 
 결과를 기준 파일과 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built . \
+  --built output \
   --reference 결과 \
   --fail-on-diff
 ```
 
 ## 결과물과 보관 범위
 
-원본 D88·KANJI1 ROM은 로컬 `import/` 또는 사용자가 지정한 위치에서 읽고, 생성된 D88·ROM은 기본적으로 저장소 루트에 둡니다. 매체 이미지와 빌드 산출물은 Git에 추가하거나 푸시하지 않습니다. 저장소에 포함되는 그래픽 파일은 `source/GFX/`의 편집용 로고 PNG입니다.
+원본 D88·KANJI1 ROM은 로컬 `import/` 또는 사용자가 지정한 위치에서 읽고, 생성된 D88·ROM은 `output/`에 둡니다. 매체 이미지와 빌드 산출물은 Git에 추가하거나 푸시하지 않습니다. 저장소에 포함되는 그래픽 파일은 `source/GFX/`의 편집용 로고 PNG입니다.
 
 ## 문서
 
