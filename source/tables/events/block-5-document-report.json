@@ -1,7 +1,4 @@
 {
-  "source_docx": "/mnt/data/Valis_fifth_event_verification_table_0001-1379_KOR_260528.docx",
-  "output_docx": "/mnt/data/Valis_fifth_event_verification_table_0001-1381_KOR_260528_RENUMBERED_PATCHED_v4.docx",
-  "audit_csv": "/mnt/data/Valis_fifth_event_0001-1381_KOR_260528_RENUMBERED_PATCHED_v4_audit.csv",
   "body_range": "0x9680~0xA24D",
   "body_length_bytes": 3022,
   "terminator_expected": "0xA24E=0F",

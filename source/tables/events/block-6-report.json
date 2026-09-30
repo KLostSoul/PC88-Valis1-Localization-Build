@@ -1,10 +1,5 @@
 {
   "purpose": "Block 6 Korean patch after row add/delete recalculation from 0001-0411 document.",
-  "input_d88": "/mnt/data/Mugen Senshi Valis Disk A(7).d88",
-  "input_docx": "/mnt/data/Valis_sixth_event_verification_table_0001-0411_KOR_260529_RENUMBERED_PATCHED_v3.docx",
-  "output_d88": "/mnt/data/Mugen_Senshi_Valis_Disk_A_block6_FINAL_0001-0411_KOR_260529_v3_2026-05-29.d88",
-  "ips": "/mnt/data/Valis_DiskA_block6_FINAL_0001-0411_KOR_260529_v3_2026-05-29.ips",
-  "changes_csv": "/mnt/data/Valis_DiskA_block6_FINAL_0001-0411_KOR_260529_v3_changes_2026-05-29.csv",
   "runtime_range_written": "0x9680~0x99EA",
   "body_runtime_range": "0x9680~0x99E9",
   "terminator": "0x99EA=0F",

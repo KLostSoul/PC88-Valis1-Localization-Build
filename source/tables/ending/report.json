@@ -1,10 +1,5 @@
 {
   "purpose": "Patch original Disk A ending 24 segments using latest v5 correction table and 471-character KANJI assignment.",
-  "source_docx": "/mnt/data/Valis_ending_24_segments_CORRECTION_TABLE_TOTAL_RANGE_FLEXIBLE(5).docx",
-  "base_d88_original": "/mnt/data/Mugen Senshi Valis Disk A(7).d88",
-  "assignment_csv": "/mnt/data/Valis_KANJI1_speech_ready_hangul_assignment_471_with_ending_v5.csv",
-  "output_d88": "/mnt/data/Mugen_Senshi_Valis_Disk_A_ORIGINAL_ending_FULL24_BASECODE_471_8022_9022_v5_2026-05-29.d88",
-  "ips": "/mnt/data/Valis_DiskA_ORIGINAL_ending_FULL24_BASECODE_471_8022_9022_v5_2026-05-29.ips",
   "encoding_policy": {
     "hangul": "KANJI1 471 mapping KANJI코드/base_code low byte then high byte",
     "quotes": {

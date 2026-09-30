@@ -1,7 +1,4 @@
 {
-  "source_docx": "/mnt/data/Valis_fourth_event_verification_table_0001-0811_KOR_FINAL_RENUMBERED_PATCHED_v2(2).docx",
-  "output_docx": "/mnt/data/Valis_fourth_event_verification_table_0001-0811_KOR_FINAL_SPEECH_RECOLORED_PATCHED_v3.docx",
-  "audit_csv": "/mnt/data/Valis_fourth_event_0001-0811_KOR_FINAL_SPEECH_RECOLORED_PATCHED_v3_audit.csv",
   "body_range": "0x9680~0x9D93",
   "body_length_bytes": 1812,
   "terminator_expected": "0x9D94=0F",

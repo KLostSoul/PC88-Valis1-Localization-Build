@@ -50,10 +50,17 @@ class SourceComponentTests(unittest.TestCase):
             path = ROOT / f"source/tables/events/block-{block}-raw-changes.csv"
             with path.open(encoding="utf-8-sig", newline="") as handle:
                 rows = list(csv.DictReader(handle))
-            self.assertEqual(len(rows), count)
-            offsets = [row["disk_offset"] for row in rows]
+            offsets = []
+            for row in rows:
+                row_offsets = row["disk_offsets"].split()
+                old_values = row["raw_old_bytes"].split()
+                new_values = row["raw_new_bytes"].split()
+                self.assertTrue(row_offsets)
+                self.assertEqual(len(row_offsets), len(old_values))
+                self.assertEqual(len(row_offsets), len(new_values))
+                offsets.extend(row_offsets)
+            self.assertEqual(len(offsets), count)
             self.assertEqual(len(offsets), len(set(offsets)))
-            self.assertTrue(all(row["raw_old"] and row["raw_new"] for row in rows))
 
     def test_logo_source_map_points_to_supplied_png_layers(self):
         source_map = ROOT / "source/tables/logo/source-map.csv"

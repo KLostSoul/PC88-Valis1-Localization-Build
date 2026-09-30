@@ -1,6 +1,4 @@
 {
-  "source_docx": "/mnt/data/Valis_second_event_1-1654_KOR_260528(1).docx",
-  "output_docx": "/mnt/data/Valis_second_event_1-1653_KOR_FINAL_RENUMBERED_ORANGE_SPEECH_QUOTE8822_9822.docx",
   "body_range": "0x9680~0xA4F4",
   "body_length_bytes": 3701,
   "terminator_expected": "0xA4F5=0F",

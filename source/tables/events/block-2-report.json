@@ -1,10 +1,5 @@
 {
   "purpose": "FINAL Block 2 Korean patch from recalculated 1653-row document after user-deleted unnecessary row; orange dialogue rows use speech tokens; quotes are confirmed “=88 22, ”=98 22.",
-  "input_d88": "/mnt/data/Mugen Senshi Valis Disk A(7).d88",
-  "input_docx": "/mnt/data/Valis_second_event_1-1653_KOR_FINAL_RENUMBERED_ORANGE_SPEECH_QUOTE8822_9822.docx",
-  "output_d88": "/mnt/data/Mugen_Senshi_Valis_Disk_A_block2_FINAL_1-1653_KOR_ORANGE_SPEECH_QUOTE8822_9822_2026-05-28.d88",
-  "ips": "/mnt/data/Valis_DiskA_block2_FINAL_1-1653_KOR_ORANGE_SPEECH_QUOTE8822_9822_2026-05-28.ips",
-  "changes_csv": "/mnt/data/Valis_DiskA_block2_FINAL_1-1653_KOR_ORANGE_SPEECH_QUOTE8822_9822_changes_2026-05-28.csv",
   "runtime_range_written": "0x9680~0xA4F5",
   "body_runtime_range": "0x9680~0xA4F4",
   "terminator": "0xA4F5=0F",

@@ -1,10 +1,5 @@
 {
   "purpose": "Block 4 final Korean patch v3 after speech-row recoloring from 811-row document.",
-  "input_d88": "/mnt/data/Mugen Senshi Valis Disk A(7).d88",
-  "input_docx": "/mnt/data/Valis_fourth_event_verification_table_0001-0811_KOR_FINAL_SPEECH_RECOLORED_PATCHED_v3.docx",
-  "output_d88": "/mnt/data/Mugen_Senshi_Valis_Disk_A_block4_FINAL_0001-0811_KOR_SPEECH_RECOLORED_v3_2026-05-28.d88",
-  "ips": "/mnt/data/Valis_DiskA_block4_FINAL_0001-0811_KOR_SPEECH_RECOLORED_v3_2026-05-28.ips",
-  "changes_csv": "/mnt/data/Valis_DiskA_block4_FINAL_0001-0811_KOR_SPEECH_RECOLORED_v3_changes_2026-05-28.csv",
   "runtime_range_written": "0x9680~0x9D94",
   "body_runtime_range": "0x9680~0x9D93",
   "terminator": "0x9D94=0F",
