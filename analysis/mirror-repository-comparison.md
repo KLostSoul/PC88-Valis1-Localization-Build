@@ -12,4 +12,4 @@
 | 검증 | 소스 검사·테스트·결과 해시·선택적 바이트 비교 |
 | 완료 매체·IPS | 결과 대조 자료 |
 
-기준 결과 해시는 `source/accepted/release-baseline.json`에 기록합니다.
+기준 결과 해시는 `source/release-baseline.json`에 기록합니다.

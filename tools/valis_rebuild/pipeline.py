@@ -15,7 +15,7 @@ from .source_gate import require_buildable
 
 def source_tree_hash(root: Path) -> str:
     digest = hashlib.sha256()
-    source_root = root / "source" / "accepted"
+    source_root = root / "source"
     for path in sorted(p for p in source_root.rglob("*") if p.is_file()):
         digest.update(str(path.relative_to(root)).encode("utf-8"))
         digest.update(b"\0")
@@ -29,23 +29,31 @@ def _write_json(path: Path, value: object) -> None:
 
 
 def _baseline(root: Path) -> dict:
-    return json.loads((root / "source/accepted/release-baseline.json").read_text(encoding="utf-8"))
+    return json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
 
 
-def _require_input(path: Path, expected_hash: str, expected_size: int, label: str) -> None:
+def _require_input(
+    path: Path,
+    expected_hash: str,
+    expected_size: int,
+    label: str,
+    *,
+    allow_hash_mismatch: bool = False,
+) -> bool:
     actual = hashlib.sha256(path.read_bytes()).hexdigest()
-    if path.stat().st_size != expected_size or actual != expected_hash:
+    if path.stat().st_size != expected_size or (actual != expected_hash and not allow_hash_mismatch):
         raise ValueError(
             f"{label}가 검토된 원본과 다릅니다: 크기={path.stat().st_size}, sha256={actual}"
         )
+    return actual == expected_hash
 
 
 def _disk_tables(root: Path) -> list[tuple[str, Path]]:
-    tables = [(f"event_block_{n}", root / f"source/accepted/tables/events/block-{n}-raw-changes.csv") for n in range(1, 7)]
+    tables = [(f"event_block_{n}", root / f"source/tables/events/block-{n}-raw-changes.csv") for n in range(1, 7)]
     tables += [
-        ("ending_1_24", root / "source/accepted/tables/ending/raw-changes.csv"),
-        ("error07", root / "source/accepted/tables/error07/raw-changes.csv"),
-        ("logo", root / "source/accepted/tables/logo/raw-changes.csv"),
+        ("ending_1_24", root / "source/tables/ending/raw-changes.csv"),
+        ("error07", root / "source/tables/error07/raw-changes.csv"),
+        ("logo", root / "source/tables/logo/raw-changes.csv"),
     ]
     return tables
 
@@ -56,9 +64,9 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
     _require_input(input_path, baseline["input"]["d88_sha256"], baseline["input"]["d88_size"], "D88 input")
     image = D88Image.read(input_path)
     component_reports = []
-    component_reports.extend(apply_gameover(image, root / "source/accepted"))
+    component_reports.extend(apply_gameover(image, root / "source"))
     component_reports.extend(apply_raw_tables(image, _disk_tables(root)))
-    component_reports.append(apply_hold_patch(image, root / "source/accepted/tables/gameover/hold-34-35.json"))
+    component_reports.append(apply_hold_patch(image, root / "source/tables/gameover/hold-34-35.json"))
     output_dir.mkdir(parents=True, exist_ok=True)
     output = output_dir / "valis_disk_a(K).d88"
     image.save(output)
@@ -78,14 +86,26 @@ def build_disk(root: Path, input_path: Path, output_dir: Path) -> dict:
     return log
 
 
-def build_kanji(root: Path, input_path: Path, output_dir: Path) -> dict:
+def build_kanji(
+    root: Path,
+    input_path: Path,
+    output_dir: Path,
+    *,
+    allow_input_hash_mismatch: bool = False,
+) -> dict:
     require_buildable(root)
     baseline = _baseline(root)
-    _require_input(input_path, baseline["input"]["kanji1_sha256"], baseline["input"]["kanji1_size"], "KANJI1 input")
+    input_matches_baseline = _require_input(
+        input_path,
+        baseline["input"]["kanji1_sha256"],
+        baseline["input"]["kanji1_size"],
+        "KANJI1 input",
+        allow_hash_mismatch=allow_input_hash_mismatch,
+    )
     original = input_path.read_bytes()
     assignments = load_assignments(
-        root / "source/accepted/tables/kanji/assignments.csv",
-        root / "source/accepted/kanji",
+        root / "source/tables/kanji/assignments.csv",
+        root / "source/kanji",
     )
     output_bytes, glyph_report = build_rom(original, assignments)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -95,6 +115,7 @@ def build_kanji(root: Path, input_path: Path, output_dir: Path) -> dict:
         "schema": "valis-reproduction-log/v1",
         "kind": "kanji1",
         "input": {"path": str(input_path), "sha256": hashlib.sha256(original).hexdigest()},
+        "input_matches_baseline": input_matches_baseline,
         "source_tree_sha256": source_tree_hash(root),
         "assignments": len(assignments),
         "changed_slots": sum(item["changed"] for item in glyph_report),

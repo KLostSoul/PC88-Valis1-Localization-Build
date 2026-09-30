@@ -10,4 +10,4 @@
 | LOGO-RAW-MAP | 로고 분석·대응표 | D88 raw 바이트 구간 | `apply_raw_tables` | 원본 바이트·릴리스 해시 |
 | ERROR07-FINAL-TABLE | ERROR 07 패치 표 | 명령 스트림 구간 | `apply_raw_tables` | 원본 바이트·릴리스 해시 |
 
-일본어 원문과 한글 번역은 `source/accepted/text/`에 별도 원천으로 보존합니다. 빌드 도구는 번역문에서 토큰을 다시 만들지 않습니다.
+일본어 원문과 한글 번역은 `source/text/`에 별도 원천으로 보존합니다. 빌드 도구는 번역문에서 토큰을 다시 만들지 않습니다.

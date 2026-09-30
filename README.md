@@ -9,12 +9,12 @@
 
 원본 이미지는 `QUASI88 0.7.4`의 디버그 기능을 사용해서 분석되었습니다.
 
-분석한 원본 이미지의 정보는 `source/accepted/media/d88-layout.json`, `KANJI1.ROM`은 `source/accepted/media/kanji1-layout.json`의 레이아웃을 확인하세요.
+분석한 원본 이미지의 정보는 `source/media/d88-layout.json`, `KANJI1.ROM`은 `source/media/kanji1-layout.json`의 레이아웃을 확인하세요.
 
 ## 빌드 구성
 
 - `analysis/`: 분석 근거 장부와 디버거 관찰 자료
-- `source/accepted/`: 원문·한글 번역·제어 토큰·직접 바이트·KANJI1 글리프 원천표
+- `source/`: 원문·한글 번역·제어 토큰·직접 바이트·KANJI1 글리프 원천표
 - `tools/valis_rebuild/`: D88 처리기, 원본 바이트 검사기, 직접 기록기, ROM 생성기
 - `tests/`: 소스·구조·직렬화·통합 검증
 - `docs/`: 작업 문서
@@ -49,6 +49,17 @@ PYTHONPATH=. python -m tools.valis_rebuild build \
   --rom /path/to/KANJI1.ROM \
   --out build/reproduction
 ```
+
+현재 `import/KANJI1.ROM`을 입력으로 사용해 글리프 ROM을 `output/`에 만들려면 다음을 실행합니다.
+
+```sh
+PYTHONPATH=. python -m tools.valis_rebuild build-rom \
+  --rom import/KANJI1.ROM \
+  --out output \
+  --allow-input-hash-mismatch
+```
+
+이 ROM은 기준 입력 SHA-256과 다르므로 결과 보고서는 `input_matches_baseline: false`로 기록합니다. 크기는 검증하며, 해당 ROM에 명시된 476개 글리프를 기록합니다.
 
 출력을 검증합니다.
 

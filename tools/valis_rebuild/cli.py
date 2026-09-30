@@ -75,7 +75,15 @@ def command_build_rom(args: argparse.Namespace) -> dict:
     root = repo_root()
     source = Path(args.rom).resolve()
     _reject_reference(source)
-    return {"command": "build-rom", **build_kanji(root, source, Path(args.out).resolve())}
+    return {
+        "command": "build-rom",
+        **build_kanji(
+            root,
+            source,
+            Path(args.out).resolve(),
+            allow_input_hash_mismatch=args.allow_input_hash_mismatch,
+        ),
+    }
 
 
 def command_build(args: argparse.Namespace) -> dict:
@@ -164,6 +172,11 @@ def build_parser() -> argparse.ArgumentParser:
     build_rom = sub.add_parser("build-rom", help="확정된 476개 글리프로 KANJI1 ROM 생성")
     build_rom.add_argument("--rom", required=True, help="사용자가 제공한 원본 KANJI1 ROM 경로")
     build_rom.add_argument("--out", default="build/reproduction/kanji", help="KANJI1 출력 디렉터리")
+    build_rom.add_argument(
+        "--allow-input-hash-mismatch",
+        action="store_true",
+        help="ROM 크기 검증 후 기준 해시가 다른 원본도 허용하고 결과 보고서에 차이를 기록",
+    )
     build_rom.set_defaults(handler=command_build_rom)
     build = sub.add_parser("build", help="D88와 KANJI1을 함께 재현 빌드")
     build.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")

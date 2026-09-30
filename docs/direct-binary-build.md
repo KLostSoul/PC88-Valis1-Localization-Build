@@ -21,7 +21,7 @@
 - 원본 PC-88 D88 디스크 이미지
 - 원본 `KANJI1.ROM`
 
-원본 D88은 `source/accepted/media/d88-layout.json`, 원본 `KANJI1.ROM`은 `source/accepted/media/kanji1-layout.json`의 레이아웃을 기준으로 확인합니다.
+원본 D88은 `source/media/d88-layout.json`, 원본 `KANJI1.ROM`은 `source/media/kanji1-layout.json`의 레이아웃을 기준으로 확인합니다.
 
 두 파일은 해시와 크기를 먼저 확인합니다. 원본 바이트 가드가 맞지 않으면 해당 위치의 수정은 중단됩니다. 이 검사는 다른 버전의 롬에 조용히 패치를 적용하는 일을 막습니다.
 
@@ -37,14 +37,14 @@
 
 | 영역 | 확정 소스 | 역할 |
 |---|---|---|
-| 이벤트 블록 1~6 | `source/accepted/tables/events/`, `source/accepted/text/` | 원문·한글 번역과 최종 raw 바이트 |
+| 이벤트 블록 1~6 | `source/tables/events/`, `source/text/` | 원문·한글 번역과 최종 raw 바이트 |
 | 게임오버 | `gameover-fixed.jsonl`, `gameover-scroll.jsonl`, `gameover/hold-34-35.json` | 고정 15개와 스크롤 35개의 행·토큰·보류 영역 |
 | 엔딩 | `tables/ending/`, `text/ending-24.jsonl` | 24개 세그먼트, 종결자, 길이와 물리 위치 |
 | 로고 | `tables/logo/`, `tables/logo/edit_layers/` | RAM 관찰값·PNG plane·최종 raw 기록의 대응 |
 | ERROR 07 | `tables/error07/` | 최종 명령 스트림 바이트와 입력 근거 |
-| 문자·칸지 | `tables/kanji/`, `kanji/glyphs/` | 476개 글리프와 슬롯·토큰·ROM 오프셋 |
+| 문자·칸지 | `source/tables/kanji/`, `source/kanji/` | 476개 글리프와 슬롯·토큰·ROM 오프셋 |
 | 제어 토큰 | `tables/tokens/` | 제어 바이트와 일반 문자 바이트의 구분 |
-| 역어셈 관찰 | `source/accepted/asm/` | 수정 이유와 실행 위치를 설명하는 참고 기록 |
+| 역어셈 관찰 | `source/asm/` | 수정 이유와 실행 위치를 설명하는 참고 기록 |
 
 최종 원시 변경표 자체가 각 컴포넌트의 폐쇄된 원본→결과 계약입니다. 별도의 사후 통합 덮어쓰기 표는 두지 않습니다.
 

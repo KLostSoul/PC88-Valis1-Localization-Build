@@ -84,6 +84,6 @@ Python 직접 바이너리 기록
 
 ## 6. 관련 파일
 
-- 확정 소스 목록: `source/accepted/source-manifest.json`
+- 확정 소스 목록: `source/source-manifest.json`
 - 근거 장부: `analysis/evidence-ledger.json`
-- 최종 계약: `source/accepted/release-baseline.json`
+- 최종 계약: `source/release-baseline.json`

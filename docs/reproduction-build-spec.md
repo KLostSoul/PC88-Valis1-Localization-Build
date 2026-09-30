@@ -10,7 +10,7 @@
 - 출력: 원본 컨테이너를 보존한 재현 D88과 수정된 KANJI1 ROM
 - 결과 대조: 완료본·IPS·추출 이미지와 결과를 비교합니다.
 
-원본 D88은 `source/accepted/media/d88-layout.json`, 원본 KANJI1 ROM은 `source/accepted/media/kanji1-layout.json`의 레이아웃을 기준으로 확인합니다.
+원본 D88은 `source/media/d88-layout.json`, 원본 KANJI1 ROM은 `source/media/kanji1-layout.json`의 레이아웃을 기준으로 확인합니다.
 
 ## 적용 규칙
 

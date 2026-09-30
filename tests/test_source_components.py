@@ -16,8 +16,8 @@ ORIGINAL_D88 = ROOT.parent / "upload" / "Mugen Senshi Valis (1986)(Nihon Telenet
 
 class SourceComponentTests(unittest.TestCase):
     def test_original_and_korean_event_tables_are_separate_literal_sources(self):
-        original = ROOT / "source/accepted/text/event-block-2.jsonl"
-        korean = ROOT / "source/accepted/text/event-block-2-korean.jsonl"
+        original = ROOT / "source/text/event-block-2.jsonl"
+        korean = ROOT / "source/text/event-block-2-korean.jsonl"
         original_rows = [json.loads(line) for line in original.read_text(encoding="utf-8").splitlines()]
         korean_rows = [json.loads(line) for line in korean.read_text(encoding="utf-8").splitlines()]
         self.assertGreater(len(original_rows), 0)
@@ -28,8 +28,8 @@ class SourceComponentTests(unittest.TestCase):
     @unittest.skipUnless(ORIGINAL_ROM.exists(), "original KANJI1 is not supplied")
     def test_explicit_kanji_source_reproduces_known_rom_hash(self):
         assignments = load_assignments(
-            ROOT / "source/accepted/tables/kanji/assignments.csv",
-            ROOT / "source/accepted/kanji",
+            ROOT / "source/tables/kanji/assignments.csv",
+            ROOT / "source/kanji",
         )
         output, _ = build_rom(ORIGINAL_ROM.read_bytes(), assignments)
         self.assertEqual(
@@ -40,14 +40,14 @@ class SourceComponentTests(unittest.TestCase):
     def test_text_source_index_has_original_translation_and_all_segment_sets(self):
         report = lint_text_sources(ROOT)
         self.assertEqual(report["status"], "OK", report)
-        ending = [json.loads(line) for line in (ROOT / "source/accepted/text/ending-24.jsonl").read_text(encoding="utf-8").splitlines()]
+        ending = [json.loads(line) for line in (ROOT / "source/text/ending-24.jsonl").read_text(encoding="utf-8").splitlines()]
         self.assertEqual([row["segment"] for row in ending], list(range(1, 25)))
         self.assertTrue(all(row["original"] and row["translation"] for row in ending))
 
     def test_literal_raw_tables_have_expected_counts_and_unique_offsets(self):
         expected = {1: 1449, 2: 3536, 3: 1934, 4: 1701, 5: 2848, 6: 817}
         for block, count in expected.items():
-            path = ROOT / f"source/accepted/tables/events/block-{block}-raw-changes.csv"
+            path = ROOT / f"source/tables/events/block-{block}-raw-changes.csv"
             with path.open(encoding="utf-8-sig", newline="") as handle:
                 rows = list(csv.DictReader(handle))
             self.assertEqual(len(rows), count)
@@ -56,12 +56,12 @@ class SourceComponentTests(unittest.TestCase):
             self.assertTrue(all(row["raw_old"] and row["raw_new"] for row in rows))
 
     def test_logo_source_map_points_to_supplied_png_layers(self):
-        source_map = ROOT / "source/accepted/tables/logo/source-map.csv"
+        source_map = ROOT / "source/tables/logo/source-map.csv"
         with source_map.open(encoding="utf-8-sig", newline="") as handle:
             rows = list(csv.DictReader(handle))
         self.assertEqual(len(rows), 6)
         for row in rows:
-            path = ROOT / "source/accepted/tables/logo" / row["edit_png"]
+            path = ROOT / "source/tables/logo" / row["edit_png"]
             self.assertTrue(path.is_file(), path)
             self.assertEqual(path.suffix.lower(), ".png")
 

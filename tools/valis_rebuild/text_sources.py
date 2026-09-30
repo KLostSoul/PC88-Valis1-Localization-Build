@@ -1,6 +1,6 @@
 """Validation for explicitly transcribed original/translation source tables.
 
-This module reads JSONL that is already present in ``source/accepted``.  It
+This module reads JSONL that is already present in ``source``.  It
 does not open DOCX files, extract rows, derive tokens, or infer missing text.
 Its only job is to enforce the source-table contract before a build.
 """
@@ -44,7 +44,7 @@ def _read_jsonl(path: Path) -> list[dict]:
 
 def lint_text_sources(repo_root: str | Path) -> dict:
     root = Path(repo_root)
-    text_root = root / "source" / "accepted" / "text"
+    text_root = root / "source" / "text"
     index = _read_json(text_root / "source-index.json")
     errors: list[str] = []
     if index.get("schema") != "valis-literal-text-source-index/v1":

@@ -72,7 +72,7 @@ def lint_ledger(repo_root: str | Path) -> dict:
 
 def lint_source_manifest(repo_root: str | Path) -> dict:
     root = Path(repo_root)
-    path = root / "source" / "accepted" / "source-manifest.json"
+    path = root / "source" / "source-manifest.json"
     doc = _load(path)
     if doc.get("schema") != "valis-accepted-source-manifest/v2":
         raise BuildError("unexpected accepted source manifest schema")
@@ -123,7 +123,7 @@ def lint_source_manifest(repo_root: str | Path) -> dict:
 
 def lint_release_baseline(repo_root: str | Path) -> dict:
     root = Path(repo_root)
-    path = root / "source" / "accepted" / "release-baseline.json"
+    path = root / "source" / "release-baseline.json"
     doc = _load(path)
     errors: list[str] = []
     if doc.get("schema") != "valis-release-baseline/v1":
@@ -169,6 +169,6 @@ def require_buildable(repo_root: str | Path) -> dict:
     if report["status"] != "OK":
         raise BuildError(
             "build is blocked: manual evidence review is incomplete; "
-            "run source-lint and populate source/accepted only from reviewed literal data"
+            "run source-lint and populate source only from reviewed literal data"
         )
     return report

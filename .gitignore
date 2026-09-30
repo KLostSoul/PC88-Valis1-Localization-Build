@@ -18,6 +18,7 @@ source/reference/
 # Generated outputs and logs.
 build/*
 !build/.gitkeep
+output/*
 *.bin
 *.log
 __pycache__/
