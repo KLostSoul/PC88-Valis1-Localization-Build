@@ -2,7 +2,7 @@
 
 ## 1. 이 프로젝트의 방식
 
-디버거로 원본 프로그램을 역어셈블하고 실행 경로를 확인한 뒤, 대부분의 수정 위치에는 Python이 검토된 리터럴 바이트를 직접 기록합니다. 타이틀 로고는 `source/GFX/` PNG를 읽어 게임의 061F/05CE 형식으로 재인코딩한 뒤 검증된 raw 매핑으로 씁니다.
+Python이 검토된 리터럴 바이트를 직접 기록합니다. 타이틀 로고는 `source/GFX/` PNG를 읽어 게임의 061F/05CE 형식으로 인코딩한 뒤 검증된 raw 매핑으로 씁니다.
 
 따라서 다음 세 가지를 구분합니다.
 
@@ -72,7 +72,7 @@ python -m tools.valis_rebuild build-d88 --d88 import
 python -m tools.valis_rebuild build-rom --rom import
 ```
 
-`build-d88`와 통합 `build`는 `source/tables/logo/source-map.csv`에서 지정한 `source/GFX/` PNG를 입력으로 사용합니다. 기본 픽셀 상태에서는 검토된 기존 로고 바이트를 사용하며, 편집한 PNG 그룹은 표에 정의된 영역만 재인코딩합니다.
+`build-d88`와 통합 `build`는 `source/tables/logo/source-map.csv`에서 지정한 PNG 여섯 장을 매번 인코딩해 표에 정의된 영역에 기록합니다.
 
 ### 통합 빌드
 

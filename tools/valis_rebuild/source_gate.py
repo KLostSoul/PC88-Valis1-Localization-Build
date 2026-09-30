@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 
 from .errors import BuildError
-from .logo import lint_logo_inputs
+from .logo import lint_logo_inputs, _read_source_map
 from .text_sources import lint_text_sources
 from .kanji import load_assignments, read_visual_txt
 from .serializer import load_raw_writes, _byte
@@ -193,6 +193,22 @@ def lint_release_baseline(repo_root: str | Path) -> dict:
     required_contract = {"rule", "logo_png_inputs", "logo_source_groups", "logo_encoded_source_bytes", "gameover_scroll_records", "event_final_raw_updates", "error07_final_raw_updates"}
     if isinstance(contract, dict) and not required_contract.issubset(contract):
         errors.append("final component contract is incomplete")
+    if isinstance(contract, dict):
+        for field in required_contract - {"rule"}:
+            if type(contract.get(field)) is not int or contract[field] <= 0:
+                errors.append(f"invalid component contract count: {field}")
+        try:
+            groups = _read_source_map(root)
+            actual_logo = {
+                "logo_png_inputs": sum(len(group.images) for group in groups),
+                "logo_source_groups": len(groups),
+                "logo_encoded_source_bytes": sum(group.length for group in groups),
+            }
+            for field, actual in actual_logo.items():
+                if contract.get(field) != actual:
+                    errors.append(f"logo source map disagrees with component contract: {field}")
+        except (BuildError, OSError, ValueError, KeyError, TypeError) as exc:
+            errors.append(f"invalid logo source map: {exc}")
     return {
         "path": str(path.relative_to(root)),
         "logo_png_inputs": contract.get("logo_png_inputs") if isinstance(contract, dict) else None,

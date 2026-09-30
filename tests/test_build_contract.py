@@ -18,6 +18,7 @@ from tools.valis_rebuild.errors import BuildError
 from tools.valis_rebuild.logo import (
     _read_source_map, _read_ram_map, load_binary_png_rows,
     decode_061f_planes, decode_05ce_columns,
+    EncodedLogo, LogoBuildPlan, apply_logo_build,
 )
 from tools.valis_rebuild.source_gate import lint_all
 from tools.valis_rebuild.codec import decode_byte
@@ -45,6 +46,27 @@ def write_binary_png(path, rows):
 
 
 class SourceFailureTests(unittest.TestCase):
+    def test_missing_logo_input_and_wrong_source_length_contract_block_build(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_copy(root)
+            source_map = root / "source/tables/logo/source-map.csv"
+            saved = source_map.read_bytes()
+            with source_map.open(encoding="utf-8-sig", newline="") as handle:
+                reader = csv.DictReader(handle)
+                fields, rows = reader.fieldnames, list(reader)
+            with source_map.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fields)
+                writer.writeheader()
+                writer.writerows(rows[:-1])
+            self.assertEqual(lint_all(root)["status"], "BLOCKED")
+            source_map.write_bytes(saved)
+            baseline = root / "source/release-baseline.json"
+            record = json.loads(baseline.read_text(encoding="utf-8"))
+            record["component_contract"]["logo_encoded_source_bytes"] -= 1
+            baseline.write_text(json.dumps(record), encoding="utf-8")
+            self.assertEqual(lint_all(root)["status"], "BLOCKED")
+
     def test_hold_and_error_command_metadata_disagreement_blocks_build(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -148,6 +170,19 @@ class SourceFailureTests(unittest.TestCase):
 
 @unittest.skipUnless(ORIGINAL_D88.is_file() and ORIGINAL_ROM.is_file(), "original media is not supplied")
 class MediaContractTests(unittest.TestCase):
+    def test_logo_sector_mapping_must_match_actual_original_sector(self):
+        group = _read_source_map(ROOT)[0]
+        row = _read_ram_map(ROOT)[group.base]
+        logo = EncodedLogo("sector-check", group.base, bytes([int(row["stored_byte"], 16)]), "061F", (), "png_encoded")
+        original = ORIGINAL_D88.read_bytes()
+        valid = apply_logo_build(D88Image.parse(original), LogoBuildPlan((logo,), {group.base: row}))
+        self.assertEqual(valid["writes"], 1)
+        for field in ("d88_c", "d88_h", "d88_r", "sector_raw_base", "raw_index"):
+            corrupted = dict(row)
+            corrupted[field] = f"{int(row[field], 16) + 1:X}"
+            with self.subTest(field=field), self.assertRaisesRegex(BuildError, "disagrees with D88 sector"):
+                apply_logo_build(D88Image.parse(original), LogoBuildPlan((logo,), {group.base: corrupted}))
+
     def test_combined_build_cannot_overwrite_original_inputs(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
@@ -281,7 +316,7 @@ class MediaContractTests(unittest.TestCase):
                     for image in group.images:
                         saved_images[image.path] = image.path.read_bytes()
                         rows = load_binary_png_rows(image.path, group.width_pixels, group.height, group.width_bytes)
-                        rows[0][0] ^= 0x80
+                        rows[0][0] ^= 0x80 >> (len(saved_images) - 1)
                         edited_rows[image.target] = rows
                         write_binary_png(image.path, rows)
                 with patch.object(cli, "repo_root", return_value=root):

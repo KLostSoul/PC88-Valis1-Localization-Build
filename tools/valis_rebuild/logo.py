@@ -560,6 +560,8 @@ def _read_ram_map(root: Path) -> dict[int, dict[str, str]]:
             raw_index = int(row["raw_index"], 16)
             raw_base = int(row["sector_raw_base"], 16)
             cylinder = int(row["d88_c"], 16)
+            head = int(row["d88_h"], 16)
+            record = int(row["d88_r"], 16)
             stored = int(row["stored_byte"], 16)
             raw = int(row["current_raw_byte"], 16)
         except (KeyError, TypeError, ValueError) as exc:
@@ -570,6 +572,8 @@ def _read_ram_map(root: Path) -> dict[int, dict[str, str]]:
             raise BuildError(f"invalid or duplicate logo raw offset: 0x{raw_offset:X}")
         if not 0 <= stored <= 255 or not 0 <= raw <= 255:
             raise BuildError(f"logo mapping byte is out of range at 0x{address:04X}")
+        if any(not 0 <= value <= 255 for value in (cylinder, head, record)) or raw_base < 0x2B0:
+            raise BuildError(f"logo mapping sector is invalid at 0x{address:04X}")
         de = 0x400 - raw_index
         recovered = (raw - (de >> 8) - (de & 255) + 0x40 - cylinder) & 255
         if recovered != stored:
@@ -678,10 +682,15 @@ def apply_logo_build(image: D88Image, plan: LogoBuildPlan) -> dict | None:
                 raw_offset = int(mapping["raw_file_offset"], 16)
                 raw_index = int(mapping["raw_index"], 16)
                 d88_c = int(mapping["d88_c"], 16)
+                d88_h = int(mapping["d88_h"], 16)
+                d88_r = int(mapping["d88_r"], 16)
+                raw_base = int(mapping["sector_raw_base"], 16)
                 expected_raw = int(mapping["current_raw_byte"], 16)
             except (KeyError, ValueError) as exc:
                 raise BuildError(f"invalid D88 reverse-map row at 0x{address:04X}") from exc
-            image.find_data_sector(raw_offset)
+            sector = image.find_data_sector(raw_offset)
+            if (sector.c, sector.h, sector.r) != (d88_c, d88_h, d88_r) or sector.data_offset != raw_base or sector.length != 0x400 or raw_offset - sector.data_offset != raw_index:
+                raise BuildError(f"logo mapping disagrees with D88 sector at RAM 0x{address:04X}")
             actual_raw = image.data[raw_offset]
             if actual_raw != expected_raw:
                 raise BuildError(
