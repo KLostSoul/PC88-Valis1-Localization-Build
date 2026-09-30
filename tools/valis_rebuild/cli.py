@@ -36,6 +36,57 @@ def _reject_reference(path: Path) -> None:
         raise BuildError(f"비교용 또는 격리 자료는 빌드 입력이 아닙니다: {path}")
 
 
+def _resolve_hashed_input(path: Path, *, expected_hash: str, expected_size: int,
+                          label: str, suffix: str) -> Path:
+    """Accept a file path or locate one matching input in a directory by content hash."""
+    path = path.resolve()
+    _reject_reference(path)
+    if path.is_file():
+        return path
+    if not path.is_dir():
+        raise BuildError(f"{label} 입력 파일이나 폴더를 찾을 수 없습니다: {path}")
+
+    candidates = sorted(
+        item for item in path.iterdir()
+        if item.is_file() and item.suffix.lower() == suffix.lower()
+    )
+    matches = []
+    for candidate in candidates:
+        try:
+            if candidate.stat().st_size == expected_size and _sha256(candidate) == expected_hash:
+                _reject_reference(candidate)
+                matches.append(candidate.resolve())
+        except OSError as exc:
+            raise BuildError(f"{label} 후보를 읽을 수 없습니다: {candidate}") from exc
+    if not matches:
+        raise BuildError(
+            f"{path}에서 기준 {label}을 찾지 못했습니다 "
+            f"(크기={expected_size}, sha256={expected_hash})"
+        )
+    if len(matches) > 1:
+        listing = ", ".join(str(item) for item in matches)
+        raise BuildError(f"기준 {label}과 일치하는 파일이 여러 개입니다: {listing}")
+    return matches[0]
+
+
+def _resolve_unique_file(path: Path, *, label: str, suffix: str) -> Path:
+    """Accept a file or the only matching extension in a directory."""
+    path = path.resolve()
+    _reject_reference(path)
+    if path.is_file():
+        return path
+    if not path.is_dir():
+        raise BuildError(f"{label} 파일이나 폴더를 찾을 수 없습니다: {path}")
+    candidates = sorted(
+        item.resolve() for item in path.iterdir()
+        if item.is_file() and item.suffix.lower() == suffix.lower()
+    )
+    if len(candidates) != 1:
+        raise BuildError(f"{path}에서 {label} 파일을 하나로 특정할 수 없습니다: {len(candidates)}개")
+    _reject_reference(candidates[0])
+    return candidates[0]
+
+
 def command_source_lint(args: argparse.Namespace) -> dict:
     return {"command": "source-lint", **lint_all(repo_root())}
 
@@ -45,8 +96,11 @@ def command_text_lint(args: argparse.Namespace) -> dict:
 
 
 def command_export_original(args: argparse.Namespace) -> dict:
-    source = Path(args.d88).resolve()
-    _reject_reference(source)
+    baseline = json.loads((repo_root() / "source/release-baseline.json").read_text(encoding="utf-8"))
+    source = _resolve_hashed_input(
+        Path(args.d88), expected_hash=baseline["input"]["d88_sha256"],
+        expected_size=baseline["input"]["d88_size"], label="D88", suffix=".d88",
+    )
     image = D88Image.read(source)
     output = Path(args.out).resolve()
     image.export(output)
@@ -66,15 +120,21 @@ def command_export_original(args: argparse.Namespace) -> dict:
 
 def command_build_d88(args: argparse.Namespace) -> dict:
     root = repo_root()
-    source = Path(args.d88).resolve()
-    _reject_reference(source)
+    baseline = json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
+    source = _resolve_hashed_input(
+        Path(args.d88), expected_hash=baseline["input"]["d88_sha256"],
+        expected_size=baseline["input"]["d88_size"], label="D88", suffix=".d88",
+    )
     return {"command": "build-d88", **build_disk(root, source, Path(args.out).resolve())}
 
 
 def command_build_rom(args: argparse.Namespace) -> dict:
     root = repo_root()
-    source = Path(args.rom).resolve()
-    _reject_reference(source)
+    baseline = json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
+    source = _resolve_hashed_input(
+        Path(args.rom), expected_hash=baseline["input"]["kanji1_sha256"],
+        expected_size=baseline["input"]["kanji1_size"], label="KANJI1 ROM", suffix=".rom",
+    )
     return {
         "command": "build-rom",
         **build_kanji(
@@ -88,10 +148,15 @@ def command_build_rom(args: argparse.Namespace) -> dict:
 
 def command_build(args: argparse.Namespace) -> dict:
     root = repo_root()
-    d88_source = Path(args.d88).resolve()
-    rom_source = Path(args.rom).resolve()
-    _reject_reference(d88_source)
-    _reject_reference(rom_source)
+    baseline = json.loads((root / "source/release-baseline.json").read_text(encoding="utf-8"))
+    d88_source = _resolve_hashed_input(
+        Path(args.d88), expected_hash=baseline["input"]["d88_sha256"],
+        expected_size=baseline["input"]["d88_size"], label="D88", suffix=".d88",
+    )
+    rom_source = _resolve_hashed_input(
+        Path(args.rom), expected_hash=baseline["input"]["kanji1_sha256"],
+        expected_size=baseline["input"]["kanji1_size"], label="KANJI1 ROM", suffix=".rom",
+    )
     output = Path(args.out).resolve()
     # Separate component directories keep the two component logs independent.
     disk = build_disk(root, d88_source, output / "d88")
@@ -110,14 +175,13 @@ def command_build(args: argparse.Namespace) -> dict:
 
 
 def command_verify(args: argparse.Namespace) -> dict:
-    source = Path(args.d88).resolve()
+    source = _resolve_unique_file(Path(args.d88), label="D88 output", suffix=".d88")
     image = D88Image.read(source)
     result = {"command": "verify", "path": str(source), "sha256": image.sha256(),
               "size": len(image.data), "sector_count": len(image.sectors),
               "flat_payload_size": len(image.flatten_payload()), "status": "OK"}
     if args.rom:
-        rom = Path(args.rom).resolve()
-        _reject_reference(rom)
+        rom = _resolve_unique_file(Path(args.rom), label="KANJI1 output", suffix=".rom")
         rom_data = rom.read_bytes()
         if len(rom_data) != 0x20000:
             raise BuildError(f"KANJI1은 정확히 0x20000바이트여야 합니다. 현재 크기: {len(rom_data):#x}")
@@ -132,8 +196,12 @@ def command_verify(args: argparse.Namespace) -> dict:
 
 
 def command_compare(args: argparse.Namespace) -> dict:
-    built = Path(args.built).resolve()
-    reference = Path(args.reference).resolve()
+    baseline = json.loads((repo_root() / "source/release-baseline.json").read_text(encoding="utf-8"))
+    built = _resolve_unique_file(Path(args.built), label="built D88", suffix=".d88")
+    reference = _resolve_hashed_input(
+        Path(args.reference), expected_hash=baseline["output"]["d88_sha256"],
+        expected_size=baseline["output"]["d88_size"], label="reference D88", suffix=".d88",
+    )
     if reference.suffix.lower() != ".d88":
         raise BuildError("비교 기준은 로컬 D88 파일이어야 합니다")
     built_image = D88Image.read(built)
@@ -162,26 +230,26 @@ def build_parser() -> argparse.ArgumentParser:
     text_lint = sub.add_parser("text-lint", help="원문·한글 번역·토큰 행 검사")
     text_lint.set_defaults(handler=command_text_lint)
     export = sub.add_parser("export-original", help="원본 D88 구조를 읽기 전용으로 내보내기")
-    export.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
+    export.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
     export.add_argument("--out", default="build/export-original", help="구조 보고서 출력 디렉터리")
     export.set_defaults(handler=command_export_original)
     build_d88 = sub.add_parser("build-d88", help="원본 D88에 확정 raw 변경과 GFX 로고 PNG 반영")
-    build_d88.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
-    build_d88.add_argument("--out", default="build/reproduction/d88", help="D88 출력 디렉터리")
+    build_d88.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
+    build_d88.add_argument("--out", default="output/d88", help="D88 출력 디렉터리")
     build_d88.set_defaults(handler=command_build_d88)
     build_rom = sub.add_parser("build-rom", help="확정된 476개 글리프로 KANJI1 ROM 생성")
-    build_rom.add_argument("--rom", required=True, help="사용자가 제공한 원본 KANJI1 ROM 경로")
-    build_rom.add_argument("--out", default="build/reproduction/kanji", help="KANJI1 출력 디렉터리")
+    build_rom.add_argument("--rom", required=True, help="원본 KANJI1 ROM 파일 또는 SHA-256으로 찾을 후보 폴더")
+    build_rom.add_argument("--out", default="output/kanji", help="KANJI1 출력 디렉터리")
     build_rom.add_argument(
         "--allow-input-hash-mismatch",
         action="store_true",
-        help="ROM 크기 검증 후 기준 해시가 다른 원본도 허용하고 결과 보고서에 차이를 기록",
+        help="직접 ROM 파일을 지정했을 때 기준 해시가 다른 입력도 허용하고 결과 보고서에 차이를 기록",
     )
     build_rom.set_defaults(handler=command_build_rom)
     build = sub.add_parser("build", help="D88 로고 PNG와 KANJI1을 함께 재현 빌드")
-    build.add_argument("--d88", required=True, help="사용자가 제공한 원본 D88 경로")
-    build.add_argument("--rom", required=True, help="사용자가 제공한 원본 KANJI1 ROM 경로")
-    build.add_argument("--out", default="build/reproduction", help="통합 출력 디렉터리")
+    build.add_argument("--d88", required=True, help="원본 D88 파일 또는 SHA-256으로 찾을 후보 폴더")
+    build.add_argument("--rom", required=True, help="원본 KANJI1 ROM 파일 또는 SHA-256으로 찾을 후보 폴더")
+    build.add_argument("--out", default="output", help="통합 출력 디렉터리")
     build.set_defaults(handler=command_build)
     verify = sub.add_parser("verify", help="출력 D88/ROM 구조·크기·해시 검증")
     verify.add_argument("--d88", required=True, help="검증할 D88 경로")

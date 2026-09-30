@@ -21,8 +21,8 @@
 ```text
 PYTHONPATH=. python -m tools.valis_rebuild source-lint
 PYTHONPATH=. python -m tools.valis_rebuild text-lint
-PYTHONPATH=. python -m tools.valis_rebuild build --d88 /path/to/original.d88 --rom /path/to/KANJI1.ROM
-PYTHONPATH=. python -m tools.valis_rebuild verify --d88 "build/reproduction/d88/valis_disk_a(K).d88" --rom "build/reproduction/kanji/KANJI1(K).ROM"
+PYTHONPATH=. python -m tools.valis_rebuild build --d88 import --rom import --out output
+PYTHONPATH=. python -m tools.valis_rebuild verify --d88 output/d88 --rom output/kanji
 ```
 
 비교 명령으로 결과를 기준 파일과 대조합니다.

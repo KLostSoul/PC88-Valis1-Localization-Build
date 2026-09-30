@@ -12,29 +12,29 @@ PYTHONPATH=. python -m tools.valis_rebuild text-lint
 PYTHONPATH=. python -m unittest discover -s tests -v
 ```
 
-그 다음 사용자가 보유한 원본을 지정합니다.
+빌더는 입력 크기와 SHA-256을 기준 레이아웃과 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build \
-  --d88 /path/to/original.d88 \
-  --rom /path/to/KANJI1.ROM \
-  --out build/reproduction
+  --d88 import \
+  --rom import \
+  --out output
 ```
 
 출력 검증은 다음과 같습니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 "build/reproduction/d88/valis_disk_a(K).d88" \
-  --rom "build/reproduction/kanji/KANJI1(K).ROM"
+  --d88 output/d88 \
+  --rom output/kanji
 ```
 
-동일 명령을 별도 출력 디렉터리에 한 번 더 실행하고 두 결과의 SHA-256을 비교합니다. 결과를 기준 파일과 대조할 때는 다음 명령을 사용합니다.
+동일 명령을 별도 출력 디렉터리에 한 번 더 실행하고 두 결과의 SHA-256을 비교합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built "build/reproduction/d88/valis_disk_a(K).d88" \
-  --reference /path/to/reference.d88 \
+  --built output/d88 \
+  --reference 결과 \
   --fail-on-diff
 ```
 

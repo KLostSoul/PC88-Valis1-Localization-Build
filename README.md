@@ -41,42 +41,41 @@ PYTHONPATH=. python -m tools.valis_rebuild text-lint
 PYTHONPATH=. python -m unittest discover -s tests -v
 ```
 
-원본 D88과 KANJI1 ROM을 지정해 빌드합니다.
+입력은 레이아웃에 기록된 크기와 SHA-256으로 검증합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build \
-  --d88 /path/to/original.d88 \
-  --rom /path/to/KANJI1.ROM \
-  --out build/reproduction
+  --d88 import \
+  --rom import \
+  --out output
 ```
 
-로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽습니다. 픽셀 변경이 있는 그룹만 재인코딩하며, 파일명과 해상도는 유지해야 합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
+로고를 바꾸려면 `source/GFX/`의 해당 PNG를 흑백 픽셀로 편집한 뒤 같은 빌드 명령을 실행합니다. 빌더는 `source/tables/logo/source-map.csv`에서 이미지 경로, 그룹, plane, RAM 주소·길이, 해상도, 인코더를 읽습니다. 픽셀 변경이 있는 그룹만 재인코딩합니다. 로고별 파일 역할과 영역은 [`source/tables/logo/README.md`](source/tables/logo/README.md)를 참고하세요.
 
-현재 `import/KANJI1.ROM`을 입력으로 사용해 글리프 ROM을 `output/`에 만들려면 다음을 실행합니다.
+원본 KANJI1 ROM이 들어 있는 `import/` 폴더를 지정해 글리프 ROM만 만들 수도 있습니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild build-rom \
-  --rom import/KANJI1.ROM \
-  --out output \
-  --allow-input-hash-mismatch
+  --rom import \
+  --out output
 ```
 
-이 ROM은 기준 입력 SHA-256과 다르므로 결과 보고서는 `input_matches_baseline: false`로 기록합니다. 크기는 검증하며, 해당 ROM에 명시된 476개 글리프를 기록합니다.
+입력은 기록된 원본 SHA-256과 크기로 검증합니다. 빌드는 476개 글리프를 적용하고 입력 일치 여부와 출력 해시를 보고서에 기록합니다.
 
 출력을 검증합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild verify \
-  --d88 "build/reproduction/d88/valis_disk_a(K).d88" \
-  --rom "build/reproduction/kanji/KANJI1(K).ROM"
+  --d88 output/d88 \
+  --rom output/kanji
 ```
 
 결과를 기준 파일과 대조합니다.
 
 ```sh
 PYTHONPATH=. python -m tools.valis_rebuild compare \
-  --built "build/reproduction/d88/valis_disk_a(K).d88" \
-  --reference /path/to/reference.d88 \
+  --built output/d88 \
+  --reference 결과 \
   --fail-on-diff
 ```
 
